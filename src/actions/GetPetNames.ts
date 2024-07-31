@@ -1,12 +1,32 @@
 import { GetExternalVariables } from './GetExternalVariables';
 
+let petNames: string[] = null;
+
 export const GetPetNames = async () =>
 {
-    const externalVariables = await GetExternalVariables();
+    try
+    {
+        if (!petNames)
+        {
+            const externalVariables = await GetExternalVariables();
 
-    let petNames: string[] = [];
+            petNames = [];
 
-    externalVariables['pet.configuration']?.split(',')?.forEach(petName => petNames.push(petName.trim()));
+            externalVariables['pet.configuration']?.split(',')?.forEach(petName =>
+            {
+                petName = petName.trim();
+
+                if (petNames.indexOf(petName) >= 0) return;
+
+                petNames.push(petName);
+            });
+        }
+    }
+
+    catch (err)
+    {
+        console.error(err);
+    }
 
     return petNames;
 }
