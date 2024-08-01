@@ -1,5 +1,5 @@
 import { IProductData } from '../core';
-import { FetchJson, NitroConfiguration } from '../utils';
+import { FetchJson, NitroConfiguration, SaveJson } from '../utils';
 
 let productData: IProductData = null;
 
@@ -9,13 +9,15 @@ export const GetProductData = async () =>
     {
         if (!productData)
         {
-            productData = await FetchJson<IProductData>(NitroConfiguration.productDataUrl);
+            productData = await FetchJson<IProductData>({ url: NitroConfiguration.productDataUrl });
+
+            await SaveJson(productData, `./gamedata/ProductData.json`);
         }
     }
 
     catch (err)
     {
-        console.error(err);
+        console.error(err?.message ?? err);
     }
 
     return productData;

@@ -1,3 +1,4 @@
+import { NitroConfiguration } from '../utils';
 import { GetExternalVariables } from './GetExternalVariables';
 
 export const GetFlashProduction = async () =>
@@ -12,6 +13,8 @@ export const GetFlashProduction = async () =>
     {
         production = flashClientUrl.match(/flash-assets-([^/]+)/)?.[1] ?? '';
     }
+
+    NitroConfiguration.prod = production;
 
     return production;
 }

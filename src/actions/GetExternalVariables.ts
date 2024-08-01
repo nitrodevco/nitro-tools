@@ -1,4 +1,4 @@
-import { FetchText, NitroConfiguration } from '../utils';
+import { FetchText, NitroConfiguration, SaveJson } from '../utils';
 
 let externalVariables: { [key: string]: string } = null;
 
@@ -8,7 +8,7 @@ export const GetExternalVariables = async () =>
     {
         if (!externalVariables)
         {
-            const data = await FetchText(NitroConfiguration.externalVariablesUrl);
+            const data = await FetchText({ url: NitroConfiguration.externalVariablesUrl });
 
             const lines = data.split('\n');
 
@@ -22,12 +22,14 @@ export const GetExternalVariables = async () =>
 
                 externalVariables[key.trim()] = value.trim();
             }
+
+            await SaveJson(externalVariables, `./gamedata/ExternalVariables.json`)
         }
     }
 
     catch (err)
     {
-        console.error(err);
+        console.error(err?.message ?? err);
     }
 
     return externalVariables;

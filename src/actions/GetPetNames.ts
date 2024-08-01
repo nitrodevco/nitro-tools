@@ -25,7 +25,7 @@ export const GetPetNames = async () =>
 
     catch (err)
     {
-        console.error(err);
+        console.error(err?.message ?? err);
     }
 
     return petNames;

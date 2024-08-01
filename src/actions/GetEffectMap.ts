@@ -1,6 +1,6 @@
 import { IEffectMap } from '../core';
 import { EffectMapMapper } from '../mappers';
-import { FetchText, NitroConfiguration, ParseXML } from '../utils';
+import { FetchText, NitroConfiguration, ParseXML, SaveJson } from '../utils';
 
 let effectMap: IEffectMap = null;
 
@@ -10,17 +10,19 @@ export const GetEffectMap = async () =>
     {
         if (!effectMap)
         {
-            const xml = await ParseXML(await FetchText(NitroConfiguration.effectMapUrl));
+            const xml = await ParseXML(await FetchText({ url: NitroConfiguration.effectMapUrl }));
 
             effectMap = {};
 
             EffectMapMapper.mapXML(xml, effectMap);
+
+            await SaveJson(effectMap, `./gamedata/EffectMap.json`)
         }
     }
 
     catch (err)
     {
-        console.error(err);
+        console.error(err?.message ?? err);
     }
 
     return effectMap;

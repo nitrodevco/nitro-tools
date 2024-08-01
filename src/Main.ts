@@ -1,53 +1,50 @@
-import { DownloadEffectSwfs, DownloadFigureSwfs, DownloadFurnitureSwfs, DownloadPetSwfs, GetEffectMap, GetExternalTexts, GetExternalVariables, GetFigureData, GetFigureMap, GetFlashProduction, GetFurnitureData, GetProductData } from './actions';
-import { NitroConfiguration, SaveJson } from './utils';
+import { DownloadBadges, DownloadCatalogIcons, DownloadEffectSwfs, DownloadFigureSwfs, DownloadFurnitureSwfs, DownloadGordon, DownloadPetSwfs, DownloadSounds, GetEffectMap, GetExternalTexts, GetExternalVariables, GetFigureData, GetFigureMap, GetFlashProduction, GetFurnitureData, GetHabboAvatarActions, GetProductData } from './actions';
+
+let saveJSON = true;
+let downloadFurniture = false;
+let downloadPets = false;
+let downloadEffects = false;
+let downloadFigures = false;
+let downloadBadges = false;
+let downloadSounds = false;
+let downloadCatalogIcons = false;
+let downloadGordon = true;
 
 const bootstrap = async () =>
 {
     try
     {
-        const production = await GetFlashProduction();
-
-        NitroConfiguration.prod = production;
-
-        const [
-            effectMap,
-            externalTexts,
-            externalVariables,
-            figureData,
-            figureMap,
-            furnitureData,
-            productData
-        ] = await Promise.all([
+        await Promise.allSettled([
+            await GetFlashProduction(),
             await GetEffectMap(),
             await GetExternalTexts(),
             await GetExternalVariables(),
             await GetFigureData(),
             await GetFigureMap(),
             await GetFurnitureData(),
-            await GetProductData()
+            await GetProductData(),
+            await GetHabboAvatarActions()
         ]);
 
-        await Promise.all([
-            SaveJson(effectMap, `./gamedata/EffectMap.json`),
-            SaveJson(externalTexts, `./gamedata/ExternalTexts.json`),
-            SaveJson(externalVariables, `./gamedata/ExternalVariables.json`),
-            SaveJson(figureData, `./gamedata/FigureData.json`),
-            SaveJson(figureMap, `./gamedata/FigureMap.json`),
-            SaveJson(furnitureData, `./gamedata/FurnitureData.json`),
-            SaveJson(productData, `./gamedata/ProductData.json`),
-        ]);
+        const promises: Promise<void>[] = [];
 
-        await Promise.all([
-            DownloadFurnitureSwfs(),
-            DownloadPetSwfs(),
-            DownloadEffectSwfs(),
-            DownloadFigureSwfs()
-        ]);
+        downloadFurniture && promises.push(DownloadFurnitureSwfs());
+        downloadPets && promises.push(DownloadPetSwfs());
+        downloadEffects && promises.push(DownloadEffectSwfs());
+        downloadFigures && promises.push(DownloadFigureSwfs());
+        downloadBadges && promises.push(DownloadBadges());
+        downloadSounds && promises.push(DownloadSounds());
+        downloadCatalogIcons && promises.push(DownloadCatalogIcons());
+        downloadGordon && promises.push(DownloadGordon());
+
+        await Promise.allSettled(promises);
+
+        process.exit(0);
     }
 
     catch (err)
     {
-        console.error(err);
+        console.error(err?.message ?? err);
     }
 }
 
