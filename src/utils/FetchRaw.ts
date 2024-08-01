@@ -1,23 +1,21 @@
 import fetch from 'node-fetch';
+import { IFetchItem } from '../core';
 import { FetchOptions } from './FetchOptions';
 
-export const FetchRaw = async (url: string) =>
+export const FetchRaw = async (item: IFetchItem) =>
 {
-    try
+    if (!item || !item.url) throw new Error('Invalid fetch item');
+
+    const response = await fetch(item.url, FetchOptions);
+
+    if (!response || !response.ok)
     {
-        const response = await fetch(url, FetchOptions);
+        if (item.alternateUrl && item.alternateUrl.length) return FetchRaw({ ...item, url: item.alternateUrl, alternateUrl: null });
 
-        if (!response.ok) throw new Error(`Failed to fetch ${url}`);
-
-        console.log(`Fetched ${url}`);
-
-        return response;
+        throw new Error(`Failed to fetch: ${item.url}`);
     }
 
-    catch (err)
-    {
-        console.log(err.message);
-    }
+    console.log(`Fetched ${item.url}`);
 
-    return null;
+    return response;
 }

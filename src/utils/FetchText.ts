@@ -1,20 +1,11 @@
+import { IFetchItem } from '../core';
 import { FetchBuffer } from './FetchBuffer';
 
-export const FetchText = async (url: string) =>
+export const FetchText = async (item: IFetchItem) =>
 {
-    try
-    {
-        const response = await FetchBuffer(url);
+    const response = await FetchBuffer(item);
 
-        if (!response) return null;
+    if (!response) throw new Error(`Failed to fetch: ${item.url}`);
 
-        return response.toString('utf-8');
-    }
-
-    catch (err)
-    {
-        console.error(err);
-    }
-
-    return null;
+    return response.toString('utf-8');
 }

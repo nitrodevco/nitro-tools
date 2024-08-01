@@ -1,32 +1,23 @@
 import { readFile } from 'fs/promises';
-import { FetchRaw } from "./FetchRaw";
+import { IFetchItem } from '../core';
+import { FetchRaw } from './FetchRaw';
 
-export const FetchBuffer = async (url: string) =>
+export const FetchBuffer = async (item: IFetchItem) =>
 {
-    try
+    if (!item || !item.url) throw new Error('Invalid fetch item');
+
+    if (item.url.startsWith('//')) item.url = ('https:' + item.url);
+
+    if (item.url.startsWith('http'))
     {
-        if (url.startsWith('//')) url = ('https:' + url);
+        const response = await FetchRaw(item);
 
-        if (url.startsWith('http'))
-        {
-            const response = await FetchRaw(url);
+        if (!response || !response.ok) throw new Error(`Failed to fetch: ${item.url}`);
 
-            if (!response) return null;
-
-            const arrayBuffer = await response.arrayBuffer();
-
-            return Buffer.from(arrayBuffer);
-        }
-        else
-        {
-            return await readFile(url);
-        }
+        return Buffer.from(await response.arrayBuffer());
     }
-
-    catch (err)
+    else
     {
-        console.error(err);
+        return await readFile(item.url);
     }
-
-    return null;
 }

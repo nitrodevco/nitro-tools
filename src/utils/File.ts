@@ -15,11 +15,11 @@ export class File
             return true;
         }
 
-        catch (error)
+        catch (err)
         {
-            if (error.code && (error.code === 'EEXISTS')) return true;
+            if (err.code && (err.code === 'EEXISTS')) return true;
 
-            console.error(error);
+            console.error(err?.message ?? err);
 
             return false;
         }
@@ -39,9 +39,9 @@ export class File
             return await readdir(this._path);
         }
 
-        catch (error)
+        catch (err)
         {
-            console.error(error);
+            console.error(err?.message ?? err);
 
             return null;
         }
@@ -54,9 +54,9 @@ export class File
             return (await lstat(this._path)).isDirectory();
         }
 
-        catch (error)
+        catch (err)
         {
-            console.error(error);
+            console.error(err?.message ?? err);
 
             return false;
         }
@@ -69,9 +69,9 @@ export class File
             return await readFile(this._path);
         }
 
-        catch (error)
+        catch (err)
         {
-            console.error(error);
+            console.error(err?.message ?? err);
 
             return null;
         }
@@ -86,9 +86,9 @@ export class File
             return true;
         }
 
-        catch (error)
+        catch (err)
         {
-            console.error(error);
+            console.error(err?.message ?? err);
 
             return false;
         }
