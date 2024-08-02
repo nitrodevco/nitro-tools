@@ -16,7 +16,7 @@ export const GetAllFurniture = async () =>
             const aliases: IFurnitureAlias[] = [
                 ...posterIds.map(posterId =>
                 {
-                    return { name: 'poster', alias: `poster_${posterId}` };
+                    return { name: 'poster', alias: `poster${posterId}` };
                 }),
                 { name: 'footylamp', alias: 'footylamp_campaign_ing' },
                 { name: 'easy_bowl2', alias: 'easy_bowl' },

@@ -28,6 +28,7 @@
     "concat-frames": "^1.0.3",
     "free-tex-packer-core": "^0.3.4",
     "jpg-stream": "^1.1.2",
+    "lzma-native": "^8.0.6",
     "lzma-purejs": "^0.9.3",
     "node-fetch": "2.6.1",
     "pako": "^2.1.0",
@@ -38,6 +39,7 @@
   "devDependencies": {
     "@eslint/js": "^9.7.0",
     "@types/bytebuffer": "^5.0.49",
+    "@types/lzma-native": "^4.0.4",
     "@types/node": "^20.14.12",
     "@types/node-fetch": "^2.6.11",
     "@types/pako": "^2.0.3",
@@ -46,6 +48,7 @@
     "eslint": "^9.7.0",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.5.4",
-    "typescript-eslint": "^7.17.0"
+    "typescript-eslint": "^7.17.0",
+    "why-is-node-running": "^3.2.0"
   }
 }

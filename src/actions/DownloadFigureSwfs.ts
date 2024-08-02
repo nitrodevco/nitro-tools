@@ -13,7 +13,7 @@ export const DownloadFigureSwfs = async () =>
 
         return {
             url: `${NitroConfiguration.effectUrl}/${library.id}.swf`,
-            destination: `./swf/figure/${library.id}.swf`
+            destination: `./swf/figures/${library.id}.swf`
         }
     }));
 }

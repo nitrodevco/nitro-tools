@@ -16,6 +16,7 @@ export * from './ImageBundle';
 export * from './NitroBundle';
 export * from './NitroConfiguration';
 export * from './ParseXML';
+export * from './SaveBuffer';
 export * from './SaveJson';
 export * from './SlicedToArray';
 export * from './SpriteBundle';

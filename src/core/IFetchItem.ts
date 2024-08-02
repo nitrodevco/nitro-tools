@@ -1,5 +1,7 @@
 export interface IFetchItem
 {
     url: string;
-    destination: string;
+    alternateUrl?: string;
+    destination?: string;
+    overwrite?: boolean;
 }
