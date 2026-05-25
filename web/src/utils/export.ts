@@ -1,5 +1,5 @@
 import JSZip from 'jszip';
-import type { IAssetData } from '../types/nitro';
+import type { IAssetData, ISpritesheetData } from '../types/nitro';
 
 export interface NitroBundleContents {
   assetData: IAssetData;
@@ -8,13 +8,27 @@ export interface NitroBundleContents {
 
 export async function readNitroBundle(file: File): Promise<NitroBundleContents> {
   const zip = await JSZip.loadAsync(file);
-  const keys = Object.keys(zip.files);
+  const keys = Object.keys(zip.files).filter((k) => !zip.files[k].dir);
 
   const jsonKey = keys.find((k) => k.endsWith('.json') && !k.endsWith('_spritesheet.json'));
   if (!jsonKey) throw new Error('No asset JSON found in .nitro bundle');
 
   const jsonText = await zip.files[jsonKey].async('string');
   const assetData = JSON.parse(jsonText) as IAssetData;
+
+  // Real Habbo .nitro files store spritesheet data in a separate _spritesheet.json.
+  // If the main JSON doesn't have it embedded, read and merge it now.
+  if (!assetData.spritesheet) {
+    const ssKey = keys.find((k) => k.endsWith('_spritesheet.json'));
+    if (ssKey) {
+      try {
+        const ssText = await zip.files[ssKey].async('string');
+        assetData.spritesheet = JSON.parse(ssText) as ISpritesheetData;
+      } catch {
+        // spritesheet data unavailable — continue without it
+      }
+    }
+  }
 
   const pngKey = keys.find((k) => k.endsWith('.png'));
   let sheetDataUrl: string | null = null;

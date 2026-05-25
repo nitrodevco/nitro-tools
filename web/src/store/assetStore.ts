@@ -217,12 +217,20 @@ export const useAssetStore = create<AssetStore>((set, get) => ({
     set({ isRepacking: true });
     try {
       const { assetData, sheetDataUrl } = await readNitroBundle(file);
-      let images: UploadedImage[] = [];
+      // Set the asset and sheet URL immediately so all sections populate even if
+      // frame extraction fails below.
+      set({ asset: assetData, packedSheetUrl: sheetDataUrl, images: [], selectedFrameName: null });
+      // Best-effort: split the spritesheet back into individual editable images.
       if (sheetDataUrl && assetData.spritesheet?.frames) {
-        const rawFrames = assetData.spritesheet.frames as Record<string, ISpritesheetFrame>;
-        images = await extractFramesFromSheet(sheetDataUrl, rawFrames);
+        try {
+          const rawFrames = assetData.spritesheet.frames as Record<string, ISpritesheetFrame>;
+          const images = await extractFramesFromSheet(sheetDataUrl, rawFrames);
+          set({ images });
+        } catch {
+          // Frame extraction failed — asset data is still loaded, images will be empty.
+        }
       }
-      set({ asset: assetData, images, packedSheetUrl: sheetDataUrl, selectedFrameName: null, isRepacking: false });
+      set({ isRepacking: false });
       return { success: true };
     } catch (e) {
       set({ isRepacking: false });
