@@ -1,7 +1,6 @@
-import { IHabboAvatarActionsAction } from './IHabboAvatarActionsAction';
+import type { IHabboAvatarActionsAction } from './IHabboAvatarActionsAction';
 
-export interface IHabboAvatarActions
-{
+export interface IHabboAvatarActions {
     actions?: IHabboAvatarActionsAction[];
     actionOffsets?: any;
 }

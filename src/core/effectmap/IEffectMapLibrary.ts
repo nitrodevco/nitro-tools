@@ -1,5 +1,4 @@
-export interface IEffectMapLibrary
-{
+export interface IEffectMapLibrary {
     id?: string;
     lib?: string;
     type?: string;

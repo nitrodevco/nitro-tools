@@ -1,5 +1,4 @@
-export interface IFurnitureType
-{
+export interface IFurnitureType {
     id?: number;
     classname?: string;
     revision?: number;

@@ -1,8 +1,7 @@
-import { IHabboAvatarActionsActionParam } from './IHabboAvatarActionsActionParam';
-import { IHabboAvatarActionsActionType } from './IHabboAvatarActionsActionType';
+import type { IHabboAvatarActionsActionParam } from './IHabboAvatarActionsActionParam';
+import type { IHabboAvatarActionsActionType } from './IHabboAvatarActionsActionType';
 
-export interface IHabboAvatarActionsAction
-{
+export interface IHabboAvatarActionsAction {
     id?: string;
     state?: string;
     precedence?: number;

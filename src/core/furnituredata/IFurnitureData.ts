@@ -1,7 +1,6 @@
-import { IFurnitureType } from './IFurnitureType';
+import type { IFurnitureType } from './IFurnitureType';
 
-export class IFurnitureData
-{
+export class IFurnitureData {
     roomitemtypes?: {
         furnitype: IFurnitureType[]
     };

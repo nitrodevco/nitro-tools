@@ -1,6 +1,5 @@
-import { IFigureMapLibrary } from './IFigureMapLibrary';
+import type { IFigureMapLibrary } from './IFigureMapLibrary';
 
-export interface IFigureMap
-{
+export interface IFigureMap {
     libraries?: IFigureMapLibrary[];
 }

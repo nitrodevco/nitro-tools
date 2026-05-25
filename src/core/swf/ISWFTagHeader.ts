@@ -1,5 +1,4 @@
-export interface ISWFTagHeader
-{
+export interface ISWFTagHeader {
     code: number;
     length: number;
 }

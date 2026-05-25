@@ -1,23 +1,18 @@
 import { FigureDataPaletteXML } from './FigureDataPaletteXML';
 import { FigureDataSetTypeXML } from './FigureDataSetTypeXML';
 
-export class FigureDataXML
-{
+export class FigureDataXML {
     private _colorPalettes: FigureDataPaletteXML[];
     private _sets: FigureDataSetTypeXML[];
 
-    constructor(xml: any)
-    {
-        if(xml.colors !== undefined && xml.colors[0].palette !== undefined)
-        {
+    constructor(xml: any) {
+        if (xml.colors !== undefined && xml.colors[0].palette !== undefined) {
             const paletteArr = xml.colors[0].palette;
 
-            if(Array.isArray(paletteArr))
-            {
+            if (Array.isArray(paletteArr)) {
                 this._colorPalettes = [];
 
-                for(const pal in paletteArr)
-                {
+                for (const pal in paletteArr) {
                     const palette = paletteArr[pal];
 
                     this._colorPalettes.push(new FigureDataPaletteXML(palette));
@@ -25,16 +20,13 @@ export class FigureDataXML
             }
         }
 
-        if(xml.sets !== undefined && xml.sets[0].settype !== undefined)
-        {
+        if (xml.sets !== undefined && xml.sets[0].settype !== undefined) {
             const setTypeArr = xml.sets[0].settype;
 
-            if(Array.isArray(setTypeArr))
-            {
+            if (Array.isArray(setTypeArr)) {
                 this._sets = [];
 
-                for(const set in setTypeArr)
-                {
+                for (const set in setTypeArr) {
                     const setType = setTypeArr[set];
 
                     this._sets.push(new FigureDataSetTypeXML(setType));
@@ -43,13 +35,11 @@ export class FigureDataXML
         }
     }
 
-    public get colorPalettes(): FigureDataPaletteXML[]
-    {
+    public get colorPalettes(): FigureDataPaletteXML[] {
         return this._colorPalettes;
     }
 
-    public get sets(): FigureDataSetTypeXML[]
-    {
+    public get sets(): FigureDataSetTypeXML[] {
         return this._sets;
     }
 }

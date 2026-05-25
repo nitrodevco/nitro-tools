@@ -5,12 +5,12 @@ import { PassThrough } from 'stream';
 import streamToArray from 'stream-to-array';
 import { promisify } from 'util';
 import { unzip } from 'zlib';
-import { ISWFTag } from '../core';
+
+import type { ISWFTag } from '../core';
 import { SlicedToArray } from '../utils';
 import { RecognizeImageHeader } from './RecognizeImageHeader';
 
-export const ReadImagesJPEG3or4 = async (code: number, tag: Partial<ISWFTag>) =>
-{
+export const ReadImagesJPEG3or4 = async (code: number, tag: Partial<ISWFTag>) => {
     const { characterId, imgData, bitmapAlphaData } = tag;
     const imgType = RecognizeImageHeader(imgData);
 
@@ -29,8 +29,7 @@ export const ReadImagesJPEG3or4 = async (code: number, tag: Partial<ISWFTag>) =>
 
     bufferStream
         .pipe(new decoder())
-        .pipe(concatFrames.default((data: any) =>
-        {
+        .pipe(concatFrames.default((data: any) => {
             const _ref2 = SlicedToArray.slicedToArray(data, 1);
             const frame = _ref2[0];
 
@@ -38,20 +37,17 @@ export const ReadImagesJPEG3or4 = async (code: number, tag: Partial<ISWFTag>) =>
             const pCount = frame.width * frame.height;
             const output = Buffer.alloc(pCount * 4);
 
-            if (alphaBuffer !== null && alphaBuffer.length !== pCount)
-            {
+            if (alphaBuffer !== null && alphaBuffer.length !== pCount) {
                 console.error('expect alphaBuf to have size ' + pCount + ' while getting ' + alphaBuffer.length);
             }
 
-            const getAlphaBuffer = (i: any) =>
-            {
+            const getAlphaBuffer = (i: any) => {
                 if (!alphaBuffer) return 0xFF;
 
                 return alphaBuffer[i];
             };
 
-            for (let i = 0; i < pCount; ++i)
-            {
+            for (let i = 0; i < pCount; ++i) {
                 output[4 * i] = input[3 * i];
                 output[4 * i + 1] = input[3 * i + 1];
                 output[4 * i + 2] = input[3 * i + 2];

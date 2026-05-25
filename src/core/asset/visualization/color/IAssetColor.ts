@@ -1,7 +1,6 @@
-import { IAssetColorLayer } from './IAssetColorLayer';
+import type { IAssetColorLayer } from './IAssetColorLayer';
 
-export interface IAssetColor
-{
+export interface IAssetColor {
     id?: number;
     layers?: IAssetColorLayer[];
 }

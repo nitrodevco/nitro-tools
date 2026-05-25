@@ -1,5 +1,4 @@
-export interface IParticleSystemSimulation
-{
+export interface IParticleSystemSimulation {
     force?: number;
     direction?: number;
     gravity?: number;

@@ -1,5 +1,4 @@
-export interface IFigureDataPart
-{
+export interface IFigureDataPart {
     id?: number;
     type?: string;
     colorable?: boolean;

@@ -1,8 +1,7 @@
-import { IFigureDataHiddenLayer } from './IFigureDataHiddenLayer';
-import { IFigureDataPart } from './IFigureDataPart';
+import type { IFigureDataHiddenLayer } from './IFigureDataHiddenLayer';
+import type { IFigureDataPart } from './IFigureDataPart';
 
-export interface IFigureDataSet
-{
+export interface IFigureDataSet {
     id?: number;
     gender?: string;
     club?: number;

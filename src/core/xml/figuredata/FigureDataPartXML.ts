@@ -1,13 +1,11 @@
-export class FigureDataPartXML
-{
+export class FigureDataPartXML {
     private _id: number;
     private _type: string;
     private _colorable: boolean;
     private _index: number;
     private _colorindex: number;
 
-    constructor(xml: any)
-    {
+    constructor(xml: any) {
         const attributes = xml.$;
 
         this._id = ((attributes && parseInt(attributes.id)) || 0);
@@ -17,28 +15,23 @@ export class FigureDataPartXML
         this._colorindex = ((attributes && parseInt(attributes.colorindex)) || 0);
     }
 
-    public get id(): number
-    {
+    public get id(): number {
         return this._id;
     }
 
-    public get type(): string
-    {
+    public get type(): string {
         return this._type;
     }
 
-    public get colorable(): boolean
-    {
+    public get colorable(): boolean {
         return this._colorable;
     }
 
-    public get index(): number
-    {
+    public get index(): number {
         return this._index;
     }
 
-    public get colorIndex(): number
-    {
+    public get colorIndex(): number {
         return this._colorindex;
     }
 }

@@ -1,5 +1,4 @@
-export interface IAssetPosture
-{
+export interface IAssetPosture {
     id?: string;
     animationId?: number;
 }

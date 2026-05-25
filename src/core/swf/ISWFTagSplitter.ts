@@ -1,5 +1,4 @@
-export interface ISWFTagSplitter
-{
+export interface ISWFTagSplitter {
     x: number;
     y: number;
     width: number;

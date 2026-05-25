@@ -1,5 +1,6 @@
 export * from './DecompressLZMA';
 export * from './ExtractSwfFromBuffer';
+export * from './GenerateImageBundle';
 export * from './GenerateNitroBundleFromSwf';
 export * from './GenerateSpritesheet';
 export * from './HabboAssetSWF';
@@ -12,5 +13,8 @@ export * from './RecognizeImageHeader';
 export * from './SWFBuffer';
 export * from './SWFTags';
 export * from './SWFUtilities';
-export * from './tags';
+export * from './tags/CharacterTag';
+export * from './tags/DefineBinaryDataTag';
+export * from './tags/ImageTag';
+export * from './tags/SymbolClassTag';
 export * from './UncompressSWF';

@@ -1,7 +1,6 @@
-import { IProductType } from './IProductType';
+import type { IProductType } from './IProductType';
 
-export interface IProductData
-{
+export interface IProductData {
     productdata?: {
         product: IProductType[]
     };

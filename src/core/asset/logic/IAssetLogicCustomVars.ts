@@ -1,4 +1,3 @@
-export interface ICustomVars
-{
+export interface ICustomVars {
     variables?: string[];
 }

@@ -13,7 +13,7 @@
         "sourceMap": false,
         "allowJs": true,
         "esModuleInterop": true,
-        "baseUrl": "./src",
+        "rootDir": "./src",
         "outDir": "./dist",
         "strict": false
     },

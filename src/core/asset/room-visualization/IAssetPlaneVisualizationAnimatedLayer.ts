@@ -1,6 +1,5 @@
-import { IAssetPlaneVisualizationAnimatedLayerItem } from './IAssetPlaneVisualizationAnimatedLayerItem';
+import type { IAssetPlaneVisualizationAnimatedLayerItem } from './IAssetPlaneVisualizationAnimatedLayerItem';
 
-export interface IAssetPlaneVisualizationAnimatedLayer
-{
+export interface IAssetPlaneVisualizationAnimatedLayer {
     items?: IAssetPlaneVisualizationAnimatedLayerItem[];
 }

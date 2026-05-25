@@ -1,7 +1,6 @@
-import { IAssetVisualAnimationSequence } from './IAssetVisualAnimationSequence';
+import type { IAssetVisualAnimationSequence } from './IAssetVisualAnimationSequence';
 
-export interface IAssetVisualAnimationLayer
-{
+export interface IAssetVisualAnimationLayer {
     id?: number;
     loopCount?: number;
     frameRepeat?: number;

@@ -1,5 +1,4 @@
-export interface ISWFTagAsset
-{
+export interface ISWFTagAsset {
     id: number;
     name: string;
 }

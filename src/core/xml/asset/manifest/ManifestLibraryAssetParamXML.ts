@@ -1,19 +1,15 @@
-export class ManifestLibraryAssetParamXML
-{
+export class ManifestLibraryAssetParamXML {
     private readonly _value: string;
 
-    constructor(xml: any)
-    {
+    constructor(xml: any) {
         const attributes = xml.$;
 
-        if(attributes !== undefined)
-        {
+        if (attributes !== undefined) {
             this._value = attributes.value;
         }
     }
 
-    public get value(): string
-    {
+    public get value(): string {
         return this._value;
     }
 }

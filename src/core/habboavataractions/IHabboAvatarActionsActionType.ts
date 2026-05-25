@@ -1,5 +1,4 @@
-export interface IHabboAvatarActionsActionType
-{
+export interface IHabboAvatarActionsActionType {
     id?: string;
     animated?: boolean;
     preventHeadTurn?: boolean;

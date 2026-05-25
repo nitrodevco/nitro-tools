@@ -1,5 +1,4 @@
-export interface IParticleSystemParticle
-{
+export interface IParticleSystemParticle {
     isEmitter?: boolean;
     lifeTime?: number;
     fade?: boolean;

@@ -1,12 +1,11 @@
-import { ISWFTagAsset } from './ISWFTagAsset';
-import { ISWFTagHeader } from './ISWFTagHeader';
-import { ISWFTagLabel } from './ISWFTagLabel';
-import { ISWFTagScene } from './ISWFTagScene';
-import { ISWFTagSplitter } from './ISWFTagSplitter';
-import { ISWFTagSymbol } from './ISWFTagSymbol';
+import type { ISWFTagAsset } from './ISWFTagAsset';
+import type { ISWFTagHeader } from './ISWFTagHeader';
+import type { ISWFTagLabel } from './ISWFTagLabel';
+import type { ISWFTagScene } from './ISWFTagScene';
+import type { ISWFTagSplitter } from './ISWFTagSplitter';
+import type { ISWFTagSymbol } from './ISWFTagSymbol';
 
-export interface ISWFTag
-{
+export interface ISWFTag {
     header: ISWFTagHeader;
     useNetwork: boolean;
     as3: boolean;
@@ -14,7 +13,7 @@ export interface ISWFTag
     useGPU: boolean;
     useDirectBit: boolean;
     metadata: string;
-    RGB: [ number, number, number ];
+    RGB: [number, number, number];
     sceneCount: number;
     scenes: ISWFTagScene[];
     frameLabelCount: number;

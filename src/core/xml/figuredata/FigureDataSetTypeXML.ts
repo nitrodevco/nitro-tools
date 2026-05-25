@@ -1,7 +1,6 @@
 import { FigureDataSetXML } from './FigureDataSetXML';
 
-export class FigureDataSetTypeXML
-{
+export class FigureDataSetTypeXML {
     private _type: string;
     private _paletteId: number;
     private _mandatory_m_0: boolean;
@@ -10,8 +9,7 @@ export class FigureDataSetTypeXML
     private _mandatory_f_1: boolean;
     private _sets: FigureDataSetXML[];
 
-    constructor(xml: any)
-    {
+    constructor(xml: any) {
         const attributes = xml.$;
 
         this._type = ((attributes && attributes.type) || '');
@@ -21,14 +19,11 @@ export class FigureDataSetTypeXML
         this._mandatory_m_1 = ((attributes && parseInt(attributes.mand_m_1) == 1) || false);
         this._mandatory_f_1 = ((attributes && parseInt(attributes.mand_f_1) == 1) || false);
 
-        if(xml.set !== undefined)
-        {
-            if(Array.isArray(xml.set))
-            {
+        if (xml.set !== undefined) {
+            if (Array.isArray(xml.set)) {
                 this._sets = [];
 
-                for(const index in xml.set)
-                {
+                for (const index in xml.set) {
                     const set = xml.set[index];
 
                     this._sets.push(new FigureDataSetXML(set));
@@ -37,38 +32,31 @@ export class FigureDataSetTypeXML
         }
     }
 
-    public get type(): string
-    {
+    public get type(): string {
         return this._type;
     }
 
-    public get paletteId(): number
-    {
+    public get paletteId(): number {
         return this._paletteId;
     }
 
-    public get mandatoryM0(): boolean
-    {
+    public get mandatoryM0(): boolean {
         return this._mandatory_m_0;
     }
 
-    public get mandatoryM1(): boolean
-    {
+    public get mandatoryM1(): boolean {
         return this._mandatory_m_1;
     }
 
-    public get mandatoryF0(): boolean
-    {
+    public get mandatoryF0(): boolean {
         return this._mandatory_f_0;
     }
 
-    public get mandatoryF1(): boolean
-    {
+    public get mandatoryF1(): boolean {
         return this._mandatory_f_1;
     }
 
-    public get sets(): FigureDataSetXML[]
-    {
+    public get sets(): FigureDataSetXML[] {
         return this._sets;
     }
 }

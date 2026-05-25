@@ -1,5 +1,4 @@
-export interface IAssetPlaneTextureBitmap
-{
+export interface IAssetPlaneTextureBitmap {
     assetName?: string;
     normalMinX?: number;
     normalMaxX?: number;

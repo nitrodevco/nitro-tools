@@ -1,5 +1,4 @@
-export interface ISWFTagLabel
-{
+export interface ISWFTagLabel {
     frameNum: number;
     frameLabel: string;
 }

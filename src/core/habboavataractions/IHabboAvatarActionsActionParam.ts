@@ -1,5 +1,4 @@
-export interface IHabboAvatarActionsActionParam
-{
+export interface IHabboAvatarActionsActionParam {
     id?: string;
     value?: string;
 }

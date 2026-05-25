@@ -1,38 +1,31 @@
-import { ISpritesheetDataa } from '../core';
+import type { ISpritesheetData } from '../core';
 
-export class SpriteBundle
-{
+export class SpriteBundle {
     private _name: string;
-    private _spritesheet: ISpritesheetDataa;
+    private _spritesheet: ISpritesheetData;
     private _imageBuffer: Buffer;
 
-    public get name(): string
-    {
+    public get name(): string {
         return this._name;
     }
 
-    public set name(name: string)
-    {
+    public set name(name: string) {
         this._name = name;
     }
 
-    public get spritesheet(): ISpritesheetDataa
-    {
+    public get spritesheet(): ISpritesheetData {
         return this._spritesheet;
     }
 
-    public set spritesheet(spritesheet: ISpritesheetDataa)
-    {
+    public set spritesheet(spritesheet: ISpritesheetData) {
         this._spritesheet = spritesheet;
     }
 
-    public get imageData(): Buffer
-    {
+    public get imageData(): Buffer {
         return this._imageBuffer;
     }
 
-    public set imageData(imageData: Buffer)
-    {
+    public set imageData(imageData: Buffer) {
         this._imageBuffer = imageData;
     }
 }

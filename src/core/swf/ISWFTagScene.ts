@@ -1,5 +1,4 @@
-export interface ISWFTagScene
-{
+export interface ISWFTagScene {
     offset: number;
     name: string;
 }

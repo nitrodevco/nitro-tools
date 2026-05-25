@@ -1,5 +1,4 @@
-export interface IAssetAlias
-{
+export interface IAssetAlias {
     name?: string;
     link?: string;
     flipH?: boolean;

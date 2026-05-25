@@ -1,7 +1,6 @@
-import { IFigureMapLibraryPart } from './IFigureMapLibraryPart';
+import type { IFigureMapLibraryPart } from './IFigureMapLibraryPart';
 
-export interface IFigureMapLibrary
-{
+export interface IFigureMapLibrary {
     id?: string;
     revision?: number;
     parts?: IFigureMapLibraryPart[];

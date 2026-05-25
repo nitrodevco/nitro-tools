@@ -1,5 +1,4 @@
-export interface ISpritesheetFrame
-{
+export interface ISpritesheetFrame {
     frame: {
         x: number;
         y: number;

@@ -1,4 +1,3 @@
-export interface IAssetAnimationDirection
-{
+export interface IAssetAnimationDirection {
     offset?: number;
 }

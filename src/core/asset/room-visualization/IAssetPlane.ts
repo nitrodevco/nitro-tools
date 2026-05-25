@@ -1,7 +1,6 @@
-import { IAssetPlaneVisualization } from './IAssetPlaneVisualization';
+import type { IAssetPlaneVisualization } from './IAssetPlaneVisualization';
 
-export interface IAssetPlane
-{
+export interface IAssetPlane {
     id?: string;
     visualizations?: IAssetPlaneVisualization[];
     animatedVisualization?: IAssetPlaneVisualization[];

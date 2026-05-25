@@ -1,7 +1,6 @@
-import { IAssetVisualAnimationSequenceFrame } from './IAssetVisualAnimationSequenceFrame';
+import type { IAssetVisualAnimationSequenceFrame } from './IAssetVisualAnimationSequenceFrame';
 
-export interface IAssetVisualAnimationSequence
-{
+export interface IAssetVisualAnimationSequence {
     loopCount?: number;
     random?: number;
     frames?: IAssetVisualAnimationSequenceFrame[];

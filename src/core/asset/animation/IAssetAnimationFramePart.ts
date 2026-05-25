@@ -1,7 +1,6 @@
-import { IAssetAnimationFramePartItem } from './IAssetAnimationFramePartItem';
+import type { IAssetAnimationFramePartItem } from './IAssetAnimationFramePartItem';
 
-export interface IAssetAnimationFramePart
-{
+export interface IAssetAnimationFramePart {
     id?: string;
     frame?: number;
     base?: string;

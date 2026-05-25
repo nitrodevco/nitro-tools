@@ -1,5 +1,4 @@
-export interface ISWFFileLength
-{
+export interface ISWFFileLength {
     compressed: number;
     uncompressed: number;
 }

@@ -1,5 +1,4 @@
-export interface IAsset
-{
+export interface IAsset {
     name?: string;
     source?: string;
     x?: number;

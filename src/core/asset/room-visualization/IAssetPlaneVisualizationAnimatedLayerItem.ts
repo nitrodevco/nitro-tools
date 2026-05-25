@@ -1,5 +1,4 @@
-export interface IAssetPlaneVisualizationAnimatedLayerItem
-{
+export interface IAssetPlaneVisualizationAnimatedLayerItem {
     id?: number;
     assetId?: string;
     x?: string;

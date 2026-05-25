@@ -1,7 +1,6 @@
-import { IAssetPlaneMaterialCellColumn } from './IAssetPlaneMaterialCellColumn';
+import type { IAssetPlaneMaterialCellColumn } from './IAssetPlaneMaterialCellColumn';
 
-export interface IAssetPlaneMaterialCellMatrix
-{
+export interface IAssetPlaneMaterialCellMatrix {
     repeatMode?: string;
     align?: string;
     normalMinX?: number;

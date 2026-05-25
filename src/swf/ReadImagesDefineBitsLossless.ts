@@ -2,10 +2,10 @@ import encoder from 'png-stream/encoder';
 import streamToArray from 'stream-to-array';
 import { promisify } from 'util';
 import { unzip } from 'zlib';
-import { ISWFTag } from '../core';
 
-export const ReadImagesDefineBitsLossless = async (tag: Partial<ISWFTag>) =>
-{
+import type { ISWFTag } from '../core';
+
+export const ReadImagesDefineBitsLossless = async (tag: Partial<ISWFTag>) => {
     const { characterId, bitmapFormat, bitmapWidth, bitmapHeight, bitmapColorTableSize, zlibBitmapData } = tag;
 
     const pngEncoder = new encoder(bitmapWidth, bitmapHeight, { colorSpace: 'rgba' });
@@ -17,13 +17,10 @@ export const ReadImagesDefineBitsLossless = async (tag: Partial<ISWFTag>) =>
     let index = 0;
     let ptr = 0;
 
-    switch (bitmapFormat)
-    {
+    switch (bitmapFormat) {
         case 5: {
-            for (let y = 0; y < bitmapHeight; ++y)
-            {
-                for (let x = 0; x < bitmapWidth; ++x)
-                {
+            for (let y = 0; y < bitmapHeight; ++y) {
+                for (let x = 0; x < bitmapWidth; ++x) {
                     const alpha = dataBuf[ptr];
                     output[index] = dataBuf[ptr + 1] * (255 / alpha);
                     output[index + 1] = dataBuf[ptr + 2] * (255 / alpha);
@@ -40,17 +37,14 @@ export const ReadImagesDefineBitsLossless = async (tag: Partial<ISWFTag>) =>
             // 8-bit colormapped image
             const colorMap = [];
 
-            for (let i = 0; i < bitmapColorTableSize + 1; ++i)
-            {
+            for (let i = 0; i < bitmapColorTableSize + 1; ++i) {
                 colorMap.push([dataBuf[ptr], dataBuf[ptr + 1], dataBuf[ptr + 2], dataBuf[ptr + 3]]);
 
                 ptr += 4;
             }
 
-            for (let _y2 = 0; _y2 < bitmapHeight; ++_y2)
-            {
-                for (let _x2 = 0; _x2 < bitmapWidth; ++_x2)
-                {
+            for (let _y2 = 0; _y2 < bitmapHeight; ++_y2) {
+                for (let _x2 = 0; _x2 < bitmapWidth; ++_x2) {
                     const idx = dataBuf[ptr];
                     const color = idx < colorMap.length ? colorMap[idx] : [0, 0, 0, 0];
                     output[index] = color[0];

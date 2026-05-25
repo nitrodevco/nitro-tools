@@ -1,5 +1,4 @@
-export interface ISpritesheetMeta
-{
+export interface ISpritesheetMeta {
     app: string;
     version: string;
     image: string;

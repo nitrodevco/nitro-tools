@@ -1,7 +1,6 @@
-import { IAssetDimension } from './IAssetDimension';
+import type { IAssetDimension } from './IAssetDimension';
 
-export interface IAssetLogicModel
-{
+export interface IAssetLogicModel {
     dimensions?: IAssetDimension;
     directions?: number[];
 }

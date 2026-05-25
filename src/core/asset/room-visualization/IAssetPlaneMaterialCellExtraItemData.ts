@@ -1,5 +1,4 @@
-export interface IAssetPlaneMaterialCellExtraItemData
-{
+export interface IAssetPlaneMaterialCellExtraItemData {
     limitMax?: number;
     extraItemTypes?: string[];
     offsets?: [number, number][];

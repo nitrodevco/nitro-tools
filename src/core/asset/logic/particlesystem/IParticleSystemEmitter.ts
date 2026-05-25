@@ -1,8 +1,7 @@
-import { IParticleSystemParticle } from './IParticleSystemParticle';
-import { IParticleSystemSimulation } from './IParticleSystemSimulation';
+import type { IParticleSystemParticle } from './IParticleSystemParticle';
+import type { IParticleSystemSimulation } from './IParticleSystemSimulation';
 
-export interface IParticleSystemEmitter
-{
+export interface IParticleSystemEmitter {
     id?: number;
     name?: string;
     spriteId?: number;

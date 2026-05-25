@@ -1,18 +1,17 @@
 import { inflateSync } from 'zlib';
+
 import { DecompressLZMA } from './DecompressLZMA';
 import { ReadSWFBuff } from './ReadSWFBuffer';
 import { SWFBuffer } from './SWFBuffer';
 
-export const UncompressSWF = async (buffer: Buffer) =>
-{
+export const UncompressSWF = async (buffer: Buffer) => {
     const signature = buffer.toString('utf8', 0, 3);
     const version = buffer.readUInt8(3);
     const fileSize = buffer.readUInt32LE(4);
 
     let decompressedBuffer: Buffer = null;
 
-    switch (signature)
-    {
+    switch (signature) {
         case 'FWS': // Uncompressed
             decompressedBuffer = buffer;
             break;

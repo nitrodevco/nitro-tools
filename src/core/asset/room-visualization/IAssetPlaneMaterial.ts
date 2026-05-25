@@ -1,7 +1,6 @@
-import { IAssetPlaneMaterialCellMatrix } from './IAssetPlaneMaterialCellMatrix';
+import type { IAssetPlaneMaterialCellMatrix } from './IAssetPlaneMaterialCellMatrix';
 
-export interface IAssetPlaneMaterial
-{
+export interface IAssetPlaneMaterial {
     id?: string;
     matrices?: IAssetPlaneMaterialCellMatrix[];
 }

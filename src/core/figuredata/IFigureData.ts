@@ -1,8 +1,7 @@
-import { IFigureDataPalette } from './IFigureDataPalette';
-import { IFigureDataSetType } from './IFigureDataSetType';
+import type { IFigureDataPalette } from './IFigureDataPalette';
+import type { IFigureDataSetType } from './IFigureDataSetType';
 
-export interface IFigureData
-{
+export interface IFigureData {
     palettes?: IFigureDataPalette[];
     setTypes?: IFigureDataSetType[];
 }

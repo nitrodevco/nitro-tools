@@ -1,7 +1,6 @@
-import { IFigureDataSet } from './IFigureDataSet';
+import type { IFigureDataSet } from './IFigureDataSet';
 
-export interface IFigureDataSetType
-{
+export interface IFigureDataSetType {
     type?: string;
     paletteId?: number;
     mandatory_m_0?: boolean;

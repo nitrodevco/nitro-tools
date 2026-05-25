@@ -1,5 +1,4 @@
-export interface IAssetAnimationSpriteDirection
-{
+export interface IAssetAnimationSpriteDirection {
     id?: number;
     dx?: number;
     dy?: number;

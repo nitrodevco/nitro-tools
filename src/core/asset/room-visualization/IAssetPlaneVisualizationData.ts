@@ -1,9 +1,8 @@
-import { IAssetPlane } from './IAssetPlane';
-import { IAssetPlaneMaterial } from './IAssetPlaneMaterial';
-import { IAssetPlaneTexture } from './IAssetPlaneTexture';
+import type { IAssetPlane } from './IAssetPlane';
+import type { IAssetPlaneMaterial } from './IAssetPlaneMaterial';
+import type { IAssetPlaneTexture } from './IAssetPlaneTexture';
 
-export interface IAssetPlaneVisualizationData
-{
+export interface IAssetPlaneVisualizationData {
     planes?: IAssetPlane[];
     materials?: IAssetPlaneMaterial[];
     textures?: IAssetPlaneTexture[];

@@ -1,5 +1,4 @@
-export interface IAssetLogicPlanetSystem
-{
+export interface IAssetLogicPlanetSystem {
     id?: number;
     name?: string;
     parent?: string;

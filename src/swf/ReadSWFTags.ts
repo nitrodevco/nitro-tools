@@ -1,19 +1,16 @@
-import { ISWF, ISWFFileAttributes, ISWFTag, ISWFTagHeader } from '../core';
-import { SWFBuffer } from './SWFBuffer';
+import type { ISWF, ISWFFileAttributes, ISWFTag, ISWFTagHeader } from '../core';
+import type { SWFBuffer } from './SWFBuffer';
 import { SWFTags } from './SWFTags';
 
-export const readSWFTags = (buffer: SWFBuffer, swf: Partial<ISWF>) =>
-{
+export const readSWFTags = (buffer: SWFBuffer, swf: Partial<ISWF>) => {
     const tags: Partial<ISWFTag>[] = [];
 
     let header: ISWFTagHeader = null;
 
-    while ((header = buffer.readTagCodeAndLength()))
-    {
+    while ((header = buffer.readTagCodeAndLength())) {
         const tag: Partial<ISWFTag> = { header };
 
-        switch (header.code)
-        {
+        switch (header.code) {
             case SWFTags.FileAttributes: {
                 const flag = buffer.readUIntLE(32);
                 const fileAttrs: Partial<ISWFFileAttributes> = {};
@@ -180,8 +177,7 @@ export const readSWFTags = (buffer: SWFBuffer, swf: Partial<ISWF>) =>
                 tag.bitmapHeight = buffer.readUIntLE(16);
                 let restLength = (header.length - 7);
 
-                if (tag.bitmapFormat === 3)
-                {
+                if (tag.bitmapFormat === 3) {
                     tag.bitmapColorTableSize = buffer.readUInt8();
                     restLength--;
                 }

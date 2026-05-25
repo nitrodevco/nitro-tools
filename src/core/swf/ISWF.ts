@@ -1,10 +1,9 @@
-import { ISWFFileAttributes } from './ISWFFileAttributes';
-import { ISWFFileLength } from './ISWFFileLength';
-import { ISWFFrameSize } from './ISWFFrameSize';
-import { ISWFTag } from './ISWFTag';
+import type { ISWFFileAttributes } from './ISWFFileAttributes';
+import type { ISWFFileLength } from './ISWFFileLength';
+import type { ISWFFrameSize } from './ISWFFrameSize';
+import type { ISWFTag } from './ISWFTag';
 
-export interface ISWF
-{
+export interface ISWF {
     version?: number;
     fileLength?: ISWFFileLength;
     frameSize?: ISWFFrameSize;

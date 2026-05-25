@@ -1,5 +1,4 @@
-export interface IFetchItem
-{
+export interface IFetchItem {
     url: string;
     alternateUrl?: string;
     destination?: string;

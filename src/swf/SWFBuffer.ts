@@ -66,9 +66,9 @@ export class SWFBuffer {
         return this.buffer.toString(encoding, init, this.pointer - 1);
     }
 
-    public readStyleArray(buffer: SWFBuffer, next) {
+    public readStyleArray(buffer: SWFBuffer, next: (buffer: SWFBuffer) => object): Array<any> {
         let styleArrayCount = buffer.readUInt8();
-        const styles = [];
+        const styles: object[] = [];
 
         if (styleArrayCount === SWFBuffer.STYLE_COUNT_EXT) {
             styleArrayCount = buffer.readUIntLE(16);
@@ -117,10 +117,11 @@ export class SWFBuffer {
     }
 
     public readShapeRecords(buffer: SWFBuffer) {
-        let shapeRecords = null;
+        let shapeRecords: { type: string } = null;
         const typeFlag = buffer.readBits(1);
         let eos = 0;
 
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         while ((eos = buffer.readBits(5))) {
             if (typeFlag === 0) {
                 shapeRecords = {
@@ -134,8 +135,8 @@ export class SWFBuffer {
 
     public readShapeWithStyle() {
         return {
-            fillStyles: this.readStyleArray(this, this.readFillStyle),
-            lineStyles: this.readStyleArray(this, this.readLineStyle),
+            fillStyles: this.readStyleArray(this, x => this.readFillStyle(x)),
+            lineStyles: this.readStyleArray(this, x => this.readLineStyle(x)),
             numFillBits: this.readBits(4),
             numLineBits: this.readBits(4),
             shapeRecords: this.readShapeRecords(this)

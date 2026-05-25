@@ -1,7 +1,6 @@
-import { IAssetVisualizationLayer } from './IAssetVisualizationLayer';
+import type { IAssetVisualizationLayer } from './IAssetVisualizationLayer';
 
-export interface IAssetVisualizationDirection
-{
+export interface IAssetVisualizationDirection {
     id?: number;
     layers?: IAssetVisualizationLayer[];
 }

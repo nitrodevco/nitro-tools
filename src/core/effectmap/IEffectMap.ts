@@ -1,6 +1,5 @@
-import { IEffectMapLibrary } from './IEffectMapLibrary';
+import type { IEffectMapLibrary } from './IEffectMapLibrary';
 
-export interface IEffectMap
-{
+export interface IEffectMap {
     effects?: IEffectMapLibrary[];
 }

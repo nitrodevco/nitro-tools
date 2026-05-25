@@ -1,7 +1,6 @@
-import { IParticleSystemEmitter } from './IParticleSystemEmitter';
+import type { IParticleSystemEmitter } from './IParticleSystemEmitter';
 
-export interface IParticleSystem
-{
+export interface IParticleSystem {
     size?: number;
     canvasId?: number;
     offsetY?: number;

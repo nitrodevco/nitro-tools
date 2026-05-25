@@ -1,5 +1,4 @@
-export interface IAssetAnimationAdd
-{
+export interface IAssetAnimationAdd {
     id?: string;
     align?: string;
     blend?: string;

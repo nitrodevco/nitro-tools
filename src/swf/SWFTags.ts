@@ -1,5 +1,4 @@
-export class SWFTags
-{
+export class SWFTags {
     public static End: number = 0;
     public static ShowFrame: number = 1;
     public static DefineShape: number = 2;

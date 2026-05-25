@@ -1,7 +1,6 @@
-import { IAssetAnimationSpriteDirection } from './IAssetAnimationSpriteDirection';
+import type { IAssetAnimationSpriteDirection } from './IAssetAnimationSpriteDirection';
 
-export interface IAssetAnimationSprite
-{
+export interface IAssetAnimationSprite {
     id?: string;
     member?: string;
     directions?: number;

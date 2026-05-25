@@ -1,19 +1,15 @@
-export class DirectionOffsetXML
-{
+export class DirectionOffsetXML {
     private readonly _offset: number;
 
-    constructor(xml: any)
-    {
+    constructor(xml: any) {
         const attributes = xml.$;
 
-        if(attributes !== undefined)
-        {
-            if(attributes.offset !== undefined) this._offset = parseInt(attributes.offset);
+        if (attributes !== undefined) {
+            if (attributes.offset !== undefined) this._offset = parseInt(attributes.offset);
         }
     }
 
-    public get offset(): number
-    {
+    public get offset(): number {
         return this._offset;
     }
 }

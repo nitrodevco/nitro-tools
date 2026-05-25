@@ -1,11 +1,10 @@
-import { ICustomVars } from './IAssetLogicCustomVars';
-import { IAssetLogicPlanetSystem } from './IAssetLogicPlanetSystem';
-import { ISoundSample } from './ISoundSample';
-import { IAssetLogicModel } from './model/IAssetLogicModel';
-import { IParticleSystem } from './particlesystem';
+import type { ICustomVars } from './IAssetLogicCustomVars';
+import type { IAssetLogicPlanetSystem } from './IAssetLogicPlanetSystem';
+import type { ISoundSample } from './ISoundSample';
+import type { IAssetLogicModel } from './model/IAssetLogicModel';
+import type { IParticleSystem } from './particlesystem';
 
-export interface IAssetLogicData
-{
+export interface IAssetLogicData {
     model?: IAssetLogicModel;
     maskType?: string;
     credits?: string;

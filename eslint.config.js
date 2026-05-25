@@ -50,6 +50,13 @@ export default defineConfig([
             'unused-imports/no-unused-imports': 'warn',
             '@typescript-eslint/consistent-type-imports': ['warn', { prefer: 'type-imports' }],
             '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
+            '@typescript-eslint/no-explicit-any': 'off',
+            '@typescript-eslint/no-unsafe-assignment': 'off',
+            '@typescript-eslint/no-array-delete': 'off',
+            '@typescript-eslint/no-for-in-array': 'off',
+            '@typescript-eslint/no-unsafe-member-access': 'off',
+            '@typescript-eslint/no-unsafe-argument': 'off',
+            '@typescript-eslint/no-unsafe-call': 'off'
         },
     }
 ]);

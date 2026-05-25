@@ -1,5 +1,4 @@
-export interface IFigureDataColor
-{
+export interface IFigureDataColor {
     id?: number;
     index?: number;
     club?: number;

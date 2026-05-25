@@ -1,5 +1,4 @@
-export interface ISWFFileAttributes
-{
+export interface ISWFFileAttributes {
     useNetwork: boolean,
     as3: boolean,
     hasMetaData: boolean,

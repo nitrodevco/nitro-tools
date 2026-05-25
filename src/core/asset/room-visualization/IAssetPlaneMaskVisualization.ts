@@ -1,7 +1,6 @@
-import { IAssetPlaneTextureBitmap } from './IAssetPlaneTextureBitmap';
+import type { IAssetPlaneTextureBitmap } from './IAssetPlaneTextureBitmap';
 
-export interface IAssetPlaneMaskVisualization
-{
+export interface IAssetPlaneMaskVisualization {
     size?: number;
     bitmaps?: IAssetPlaneTextureBitmap[];
 }
