@@ -12,31 +12,42 @@ export function downloadJson(asset: IAssetData) {
   URL.revokeObjectURL(url);
 }
 
-export async function downloadNitroBundle(asset: IAssetData) {
+export async function downloadNitroBundle(asset: IAssetData, packedSheetUrl: string | null = null) {
   const zip = new JSZip();
   const name = asset.name ?? 'asset';
-  const json = JSON.stringify(asset, null, 2);
 
-  zip.file(`${name}.json`, json);
+  // JSON metadata
+  zip.file(`${name}.json`, JSON.stringify(asset, null, 2));
 
-  // placeholder spritesheet JSON if not provided via actual spritesheet data
-  if (!asset.spritesheet) {
-    const spritesheetJson = JSON.stringify(
-      {
-        meta: {
-          app: 'Nitro Asset Creator',
-          version: '1.0',
-          image: `${name}.png`,
-          format: 'RGBA8888',
-          size: { w: 1, h: 1 },
-          scale: '1',
+  // Spritesheet JSON
+  const spritesheetJson = asset.spritesheet
+    ? JSON.stringify(asset.spritesheet, null, 2)
+    : JSON.stringify(
+        {
+          meta: {
+            app: 'Nitro Asset Creator',
+            version: '1.0',
+            image: `${name}.png`,
+            format: 'RGBA8888',
+            size: { w: 1, h: 1 },
+            scale: '1',
+          },
+          frames: {},
         },
-        frames: {},
-      },
-      null,
-      2,
-    );
-    zip.file(`${name}_spritesheet.json`, spritesheetJson);
+        null,
+        2,
+      );
+  zip.file(`${name}_spritesheet.json`, spritesheetJson);
+
+  // PNG — use the real packed sheet if available, otherwise a 1×1 transparent placeholder
+  if (packedSheetUrl) {
+    const base64 = packedSheetUrl.split(',')[1];
+    zip.file(`${name}.png`, base64, { base64: true });
+  } else {
+    // 1×1 transparent PNG (smallest valid PNG)
+    const placeholder =
+      'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
+    zip.file(`${name}.png`, placeholder, { base64: true });
   }
 
   const content = await zip.generateAsync({ type: 'blob' });
@@ -49,6 +60,5 @@ export async function downloadNitroBundle(asset: IAssetData) {
 }
 
 export function copyToClipboard(asset: IAssetData) {
-  const json = JSON.stringify(asset, null, 2);
-  navigator.clipboard.writeText(json);
+  navigator.clipboard.writeText(JSON.stringify(asset, null, 2));
 }

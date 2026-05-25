@@ -5,6 +5,7 @@ import {
   Film,
   Home,
   Image,
+  Images,
   Info,
   Link,
   Palette,
@@ -21,10 +22,11 @@ interface NavItem {
 }
 
 export function Sidebar() {
-  const { activeTab, setActiveTab, asset } = useAssetStore();
+  const { activeTab, setActiveTab, asset, images } = useAssetStore();
 
   const items: NavItem[] = [
     { id: 'general', label: 'General', icon: Info },
+    { id: 'images', label: 'Images', icon: Images, count: images.length },
     { id: 'assets', label: 'Assets', icon: Box, count: asset.assets?.length },
     { id: 'aliases', label: 'Aliases', icon: Link, count: asset.aliases?.length },
     { id: 'palettes', label: 'Palettes', icon: Palette, count: asset.palettes?.length },
@@ -60,7 +62,10 @@ export function Sidebar() {
               {item.count !== undefined && item.count > 0 && (
                 <Badge
                   variant={active ? 'outline' : 'secondary'}
-                  className={cn('text-xs h-4 px-1.5 min-w-[1.25rem] flex items-center justify-center', active && 'border-primary-foreground/40 text-primary-foreground')}
+                  className={cn(
+                    'text-xs h-4 px-1.5 min-w-[1.25rem] flex items-center justify-center',
+                    active && 'border-primary-foreground/40 text-primary-foreground',
+                  )}
                 >
                   {item.count}
                 </Badge>

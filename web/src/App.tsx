@@ -2,8 +2,9 @@ import { TooltipProvider } from './components/ui/tooltip';
 import { ScrollArea } from './components/ui/scroll-area';
 import { Header } from './components/layout/Header';
 import { Sidebar } from './components/layout/Sidebar';
-import { JsonPreview } from './components/layout/JsonPreview';
+import { RightPanel } from './components/layout/RightPanel';
 import { GeneralSection } from './components/sections/GeneralSection';
+import { ImagesSection } from './components/sections/ImagesSection';
 import { AssetsSection } from './components/sections/AssetsSection';
 import { AliasesSection } from './components/sections/AliasesSection';
 import { PalettesSection } from './components/sections/PalettesSection';
@@ -16,6 +17,7 @@ import { useAssetStore } from './store/assetStore';
 
 const sectionComponents: Record<string, React.ComponentType> = {
   general: GeneralSection,
+  images: ImagesSection,
   assets: AssetsSection,
   aliases: AliasesSection,
   palettes: PalettesSection,
@@ -28,6 +30,7 @@ const sectionComponents: Record<string, React.ComponentType> = {
 
 const sectionTitles: Record<string, string> = {
   general: 'General',
+  images: 'Images',
   assets: 'Assets',
   aliases: 'Aliases',
   palettes: 'Palettes',
@@ -40,13 +43,14 @@ const sectionTitles: Record<string, string> = {
 
 const sectionDescriptions: Record<string, string> = {
   general: 'Core asset metadata: name, type, and renderer configuration.',
-  assets: 'Individual sprite assets that make up this bundle.',
+  images: 'Upload PNG sprites — they are auto-packed into an atlas and wired into assets & spritesheet.',
+  assets: 'Individual sprite asset entries. Auto-populated when images are uploaded.',
   aliases: 'Name aliases pointing to existing assets with optional flip.',
   palettes: 'Color palettes for pet and figure colorization.',
   animations: 'Sprite animation sequences, frames, and direction offsets.',
   visualizations: 'Per-size rendering configurations with layers, colors, and animations.',
   logic: 'Collision model, dimensions, sounds, particles, and action handlers.',
-  spritesheet: 'Atlas metadata and frame definitions for the sprite texture.',
+  spritesheet: 'Atlas metadata and frame definitions. Auto-updated when images are uploaded.',
   room: 'Floor, wall, and landscape material/texture data for room types.',
 };
 
@@ -83,9 +87,9 @@ export default function App() {
             <div className="flex flex-col flex-1 min-w-0 min-h-0">
               <ActiveSection />
             </div>
-            {/* JSON preview panel */}
-            <div className="w-[420px] shrink-0 flex flex-col min-h-0">
-              <JsonPreview />
+            {/* Right panel: Preview + JSON */}
+            <div className="w-[460px] shrink-0 flex flex-col min-h-0">
+              <RightPanel />
             </div>
           </div>
         </div>
