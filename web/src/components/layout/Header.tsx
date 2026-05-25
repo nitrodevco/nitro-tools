@@ -13,19 +13,20 @@ export function Header() {
     const file = e.target.files?.[0];
     if (!file) return;
     e.target.value = '';
-    if (file.name.endsWith('.nitro')) {
-      loadNitroBundle(file).then((result) => {
-        if (!result.success) alert(`Failed to open .nitro file: ${result.error}`);
-      });
+    if (file.name.endsWith('.json') || file.type === 'application/json') {
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        const text = evt.target?.result as string;
+        const result = loadAsset(text);
+        if (!result.success) alert(`Failed to parse JSON: ${result.error}`);
+      };
+      reader.readAsText(file);
       return;
     }
-    const reader = new FileReader();
-    reader.onload = (evt) => {
-      const text = evt.target?.result as string;
-      const result = loadAsset(text);
-      if (!result.success) alert(`Failed to parse JSON: ${result.error}`);
-    };
-    reader.readAsText(file);
+    // Treat everything else (including .nitro and unknown types from iOS) as a .nitro bundle
+    loadNitroBundle(file).then((result) => {
+      if (!result.success) alert(`Failed to open file: ${result.error}`);
+    });
   };
 
   return (
@@ -43,7 +44,7 @@ export function Header() {
       </div>
 
       <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-        <input ref={fileRef} type="file" accept=".json,.nitro" className="hidden" onChange={handleImport} />
+        <input ref={fileRef} type="file" accept=".json,.nitro,application/json,application/zip,application/x-zip-compressed,application/octet-stream" className="hidden" onChange={handleImport} />
 
         <Tooltip>
           <TooltipTrigger asChild>
