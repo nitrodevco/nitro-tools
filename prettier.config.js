@@ -1,4 +1,4 @@
-{
+export default {
     "printWidth": 88,
     "tabWidth": 4,
     "useTabs": false,

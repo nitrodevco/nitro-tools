@@ -1,155 +1,55 @@
-// @ts-check
-
-import eslint from '@eslint/js';
-import path from 'path';
+import js from '@eslint/js';
+import { defineConfig } from 'eslint/config';
+import prettier from 'eslint-config-prettier';
+import simpleImportSort from 'eslint-plugin-simple-import-sort';
+import unusedImports from 'eslint-plugin-unused-imports';
+import globals from 'globals';
 import tseslint from 'typescript-eslint';
-import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-export default tseslint.config(
-    eslint.configs.recommended,
+export default defineConfig([
+    { ignores: [
+        '**/node_modules/**',
+        '**/dist/**',
+        '**/build/**',
+        '**/.turbo/**',
+        '**/.vite/**',
+        '**/coverage/**',
+        '**/*.d.ts',
+    ]},
+    js.configs.recommended,
     ...tseslint.configs.recommendedTypeChecked,
+    prettier,
     {
+        plugins: {
+            'simple-import-sort': simpleImportSort,
+            'unused-imports': unusedImports,
+        },
         languageOptions: {
+            globals: {
+                ...globals.node
+            },
             parserOptions: {
-                project: ['./tsconfig.json','./packages/*/tsconfig.json'],
-                tsconfigRootDir: __dirname,
+                projectService: {
+                    allowDefaultProject: [
+                        '*.config.js',
+                        '*.config.ts',
+                        'packages/*/*.config.js',
+                        'packages/*/*.config.ts',
+                    ],
+                },
+                tsconfigRootDir: import.meta.dirname,
             },
         },
         rules: {
-            'indent': [
-                'error',
-                4,
-                {
-                    'SwitchCase': 1
-                }
-            ],
-            'no-multi-spaces': [
-                'error'
-            ],
-            'no-trailing-spaces': [
-                'error',
-                {
-                    'skipBlankLines': false,
-                    'ignoreComments': true
-                }
-            ],
-            'linebreak-style': [
-                'off'
-            ],
-            'quotes': [
-                'error',
-                'single'
-            ],
-            'semi': [
-                'error',
-                'always'
-            ],
-            'brace-style': [
-                'error',
-                'allman'
-            ],
-            'object-curly-spacing': [
-                'error',
-                'always'
-            ],
-            'keyword-spacing': [
-                'error',
-                {
-                    'overrides':
-                {
-                    'if':
-                    {
-                        'after': false
-                    },
-                    'for':
-                    {
-                        'after': false
-                    },
-                    'while':
-                    {
-                        'after': false
-                    },
-                    'switch':
-                    {
-                        'after': false
-                    }
-                }
-                }
-            ],
-            '@typescript-eslint/no-explicit-any': [
-                'off'
-            ],
-            '@typescript-eslint/no-unsafe-assignment': [
-                'off'
-            ],
-            '@typescript-eslint/no-unsafe-call': [
-                'off'
-            ],
-            '@typescript-eslint/no-unsafe-member-access': [
-                'off'
-            ],
-            '@typescript-eslint/no-floating-promises': [
-                'off'
-            ],
-            '@typescript-eslint/require-await': [
-                'off'
-            ],
-            '@typescript-eslint/no-unsafe-argument': [
-                'off'
-            ],
-            '@typescript-eslint/no-unsafe-return': [
-                'off'
-            ],
-            '@typescript-eslint/explicit-module-boundary-types': [
-                'off',
-                {
-                    'allowedNames': [
-                        'getMessageArray'
-                    ]
-                }
-            ],
-            '@typescript-eslint/unbound-method': [
-                'off'
-            ],
-            '@typescript-eslint/ban-ts-comment': [
-                'off'
-            ],
-            '@typescript-eslint/no-empty-function': [
-                'error',
-                {
-                    'allow': [
-                        'functions',
-                        'arrowFunctions',
-                        'generatorFunctions',
-                        'methods',
-                        'generatorMethods',
-                        'constructors'
-                    ]
-                }
-            ],
-            '@typescript-eslint/no-unused-vars': [
-                'off'
-            ],
-            '@typescript-eslint/ban-types': [
-                'error',
-                {
-                    'types':
-                    {
-                        'String': true,
-                        'Boolean': true,
-                        'Number': true,
-                        'Symbol': true,
-                        '{}': false,
-                        'Object': false,
-                        'object': false,
-                        'Function': false
-                    },
-                    'extendDefaults': true
-                }
-            ]
-        }
-    },
-);
+            'no-console': 'off',
+            'no-debugger': 'warn',
+            'no-else-return': 'warn',
+            'no-lonely-if': 'warn',
+            'simple-import-sort/imports': 'warn',
+            'simple-import-sort/exports': 'warn',
+            'unused-imports/no-unused-imports': 'warn',
+            '@typescript-eslint/consistent-type-imports': ['warn', { prefer: 'type-imports' }],
+            '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
+        },
+    }
+]);
