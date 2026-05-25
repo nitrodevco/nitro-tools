@@ -6,12 +6,19 @@ import { Button } from '../ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 
 export function Header() {
-  const { asset, resetAsset, loadAsset } = useAssetStore();
+  const { asset, resetAsset, loadAsset, loadNitroBundle } = useAssetStore();
   const fileRef = useRef<HTMLInputElement>(null);
 
   const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    e.target.value = '';
+    if (file.name.endsWith('.nitro')) {
+      loadNitroBundle(file).then((result) => {
+        if (!result.success) alert(`Failed to open .nitro file: ${result.error}`);
+      });
+      return;
+    }
     const reader = new FileReader();
     reader.onload = (evt) => {
       const text = evt.target?.result as string;
@@ -19,7 +26,6 @@ export function Header() {
       if (!result.success) alert(`Failed to parse JSON: ${result.error}`);
     };
     reader.readAsText(file);
-    e.target.value = '';
   };
 
   return (
@@ -37,7 +43,7 @@ export function Header() {
       </div>
 
       <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-        <input ref={fileRef} type="file" accept=".json" className="hidden" onChange={handleImport} />
+        <input ref={fileRef} type="file" accept=".json,.nitro" className="hidden" onChange={handleImport} />
 
         <Tooltip>
           <TooltipTrigger asChild>
@@ -48,10 +54,10 @@ export function Header() {
               onClick={() => fileRef.current?.click()}
             >
               <FolderOpen className="h-3.5 w-3.5 shrink-0" />
-              <span className="hidden sm:inline">Import JSON</span>
+              <span className="hidden sm:inline">Open</span>
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Import JSON</TooltipContent>
+          <TooltipContent>Open .nitro or .json</TooltipContent>
         </Tooltip>
 
         <Tooltip>

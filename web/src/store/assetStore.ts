@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import type { IAssetData, ISpritesheetData, ISpritesheetFrame, ISpritesheetMeta } from '../types/nitro';
 import { packImages, readImageFile, type PackResult } from '../utils/packer';
+import { readNitroBundle } from '../utils/export';
 
 export interface UploadedImage {
   id: string;
@@ -32,6 +33,7 @@ interface AssetStore {
   removeImage: (id: string) => void;
   clearImages: () => void;
   setSelectedFrame: (name: string | null) => void;
+  loadNitroBundle: (file: File) => Promise<{ success: boolean; error?: string }>;
 }
 
 const defaultAsset: IAssetData = {
@@ -85,6 +87,29 @@ function upsertAssets(existing: IAssetData['assets'], images: UploadedImage[]) {
     }
   }
   return assets;
+}
+
+async function extractFramesFromSheet(
+  sheetDataUrl: string,
+  frames: Record<string, ISpritesheetFrame>,
+): Promise<UploadedImage[]> {
+  const img = await new Promise<HTMLImageElement>((res, rej) => {
+    const el = new Image();
+    el.onload = () => res(el);
+    el.onerror = rej;
+    el.src = sheetDataUrl;
+  });
+  const ts = Date.now();
+  const result: UploadedImage[] = [];
+  for (const [name, frameData] of Object.entries(frames)) {
+    const { x, y, w, h } = frameData.frame;
+    const canvas = document.createElement('canvas');
+    canvas.width = w;
+    canvas.height = h;
+    canvas.getContext('2d')!.drawImage(img, x, y, w, h, 0, 0, w, h);
+    result.push({ id: `${name}_${ts}`, name, dataUrl: canvas.toDataURL('image/png'), width: w, height: h });
+  }
+  return result;
 }
 
 export const useAssetStore = create<AssetStore>((set, get) => ({
@@ -186,5 +211,22 @@ export const useAssetStore = create<AssetStore>((set, get) => ({
       selectedFrameName: null,
       asset: { ...asset, spritesheet: { meta: asset.spritesheet?.meta, frames: {} } },
     });
+  },
+
+  loadNitroBundle: async (file: File) => {
+    set({ isRepacking: true });
+    try {
+      const { assetData, sheetDataUrl } = await readNitroBundle(file);
+      let images: UploadedImage[] = [];
+      if (sheetDataUrl && assetData.spritesheet?.frames) {
+        const rawFrames = assetData.spritesheet.frames as Record<string, ISpritesheetFrame>;
+        images = await extractFramesFromSheet(sheetDataUrl, rawFrames);
+      }
+      set({ asset: assetData, images, packedSheetUrl: sheetDataUrl, selectedFrameName: null, isRepacking: false });
+      return { success: true };
+    } catch (e) {
+      set({ isRepacking: false });
+      return { success: false, error: String(e) };
+    }
   },
 }));
