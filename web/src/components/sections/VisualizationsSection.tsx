@@ -41,13 +41,13 @@ function LayerEditor({
         <span className="text-xs text-muted-foreground">Layer {layer.id ?? '?'}</span>
         <Button variant="ghost" size="icon" className="h-5 w-5" onClick={onRemove}><X className="h-3 w-3" /></Button>
       </div>
-      <div className="grid grid-cols-4 gap-2">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         <Field label="ID"><Input type="number" value={layer.id ?? 0} onChange={(e) => upd({ id: Number(e.target.value) })} className="h-7 text-xs" /></Field>
         <Field label="X"><Input type="number" value={layer.x ?? 0} onChange={(e) => upd({ x: Number(e.target.value) })} className="h-7 text-xs" /></Field>
         <Field label="Y"><Input type="number" value={layer.y ?? 0} onChange={(e) => upd({ y: Number(e.target.value) })} className="h-7 text-xs" /></Field>
         <Field label="Z"><Input type="number" value={layer.z ?? 0} onChange={(e) => upd({ z: Number(e.target.value) })} className="h-7 text-xs" /></Field>
       </div>
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
         <Field label="Alpha"><Input type="number" min={0} max={255} value={layer.alpha ?? 255} onChange={(e) => upd({ alpha: Number(e.target.value) })} className="h-7 text-xs" /></Field>
         <Field label="Ink"><Input value={layer.ink ?? ''} onChange={(e) => upd({ ink: e.target.value })} placeholder="ADD" className="h-7 text-xs" /></Field>
         <Field label="Tag"><Input value={layer.tag ?? ''} onChange={(e) => upd({ tag: e.target.value })} className="h-7 text-xs" /></Field>
@@ -145,7 +145,7 @@ function VisualAnimationEditor({
                 <span className="text-xs">Layer {al.id ?? ali}</span>
                 <Button variant="ghost" size="icon" className="h-4 w-4" onClick={() => upd({ layers: layers.filter((_,i)=>i!==ali) })}><X className="h-2.5 w-2.5"/></Button>
               </div>
-              <div className="grid grid-cols-4 gap-1">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-1">
                 <Field label="ID"><Input type="number" value={al.id??0} onChange={e=>updLayer({id:Number(e.target.value)})} className="h-6 text-xs" /></Field>
                 <Field label="Loop"><Input type="number" value={al.loopCount??0} onChange={e=>updLayer({loopCount:Number(e.target.value)})} className="h-6 text-xs" /></Field>
                 <Field label="Frame Rpt"><Input type="number" value={al.frameRepeat??0} onChange={e=>updLayer({frameRepeat:Number(e.target.value)})} className="h-6 text-xs" /></Field>

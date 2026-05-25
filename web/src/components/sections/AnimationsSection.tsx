@@ -82,7 +82,7 @@ function FramePartEditor({
         <span className="text-xs text-muted-foreground">Part: {part.id ?? '?'}</span>
         <Button variant="ghost" size="icon" className="h-4 w-4" onClick={onRemove}><X className="h-2.5 w-2.5" /></Button>
       </div>
-      <div className="grid grid-cols-3 gap-1">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-1">
         <Field label="ID"><Input value={part.id??''} onChange={e=>upd({id:e.target.value})} className="h-5 text-xs" /></Field>
         <Field label="Frame"><Input type="number" value={part.frame??0} onChange={e=>upd({frame:Number(e.target.value)})} className="h-5 text-xs" /></Field>
         <Field label="Base"><Input value={part.base??''} onChange={e=>upd({base:e.target.value})} className="h-5 text-xs" /></Field>

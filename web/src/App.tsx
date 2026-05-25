@@ -2,6 +2,8 @@ import { TooltipProvider } from './components/ui/tooltip';
 import { ScrollArea } from './components/ui/scroll-area';
 import { Header } from './components/layout/Header';
 import { Sidebar } from './components/layout/Sidebar';
+import { MobileNav } from './components/layout/MobileNav';
+import { MobilePreviewSheet } from './components/layout/MobilePreviewSheet';
 import { RightPanel } from './components/layout/RightPanel';
 import { GeneralSection } from './components/sections/GeneralSection';
 import { ImagesSection } from './components/sections/ImagesSection';
@@ -62,12 +64,12 @@ function ActiveSection() {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="px-6 pt-5 pb-4 border-b border-border shrink-0">
-        <h2 className="text-lg font-semibold">{title}</h2>
-        <p className="text-xs text-muted-foreground mt-0.5">{desc}</p>
+      <div className="px-4 sm:px-6 pt-4 sm:pt-5 pb-3 sm:pb-4 border-b border-border shrink-0">
+        <h2 className="text-base sm:text-lg font-semibold">{title}</h2>
+        <p className="text-xs text-muted-foreground mt-0.5 hidden sm:block">{desc}</p>
       </div>
       <ScrollArea className="flex-1">
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           <Component />
         </div>
       </ScrollArea>
@@ -78,21 +80,31 @@ function ActiveSection() {
 export default function App() {
   return (
     <TooltipProvider delayDuration={300}>
-      <div className="flex flex-col h-screen bg-background text-foreground overflow-hidden">
+      <div className="flex flex-col h-[100dvh] bg-background text-foreground overflow-hidden">
         <Header />
+
         <div className="flex flex-1 min-h-0">
-          <Sidebar />
+          {/* Desktop sidebar — hidden on mobile */}
+          <Sidebar className="hidden lg:flex" />
+
           <div className="flex flex-1 min-w-0">
-            {/* Editor panel */}
+            {/* Editor — full width on mobile, flex-1 on desktop */}
             <div className="flex flex-col flex-1 min-w-0 min-h-0">
               <ActiveSection />
             </div>
-            {/* Right panel: Preview + JSON */}
-            <div className="w-[460px] shrink-0 flex flex-col min-h-0">
+
+            {/* Desktop right panel — hidden on mobile */}
+            <div className="hidden lg:flex w-[460px] shrink-0 flex-col min-h-0">
               <RightPanel />
             </div>
           </div>
         </div>
+
+        {/* Mobile bottom nav */}
+        <MobileNav />
+
+        {/* Mobile preview FAB + bottom sheet */}
+        <MobilePreviewSheet />
       </div>
     </TooltipProvider>
   );

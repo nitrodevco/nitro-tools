@@ -21,7 +21,7 @@ interface NavItem {
   count?: number;
 }
 
-export function Sidebar() {
+export function Sidebar({ className }: { className?: string }) {
   const { activeTab, setActiveTab, asset, images } = useAssetStore();
 
   const items: NavItem[] = [
@@ -38,7 +38,7 @@ export function Sidebar() {
   ];
 
   return (
-    <div className="w-52 border-r border-border bg-background shrink-0 flex flex-col">
+    <div className={cn('w-52 border-r border-border bg-background shrink-0 flex-col', className)}>
       <div className="px-3 py-4 space-y-0.5">
         <p className="px-2 mb-2 text-xs font-semibold text-muted-foreground uppercase tracking-widest">Sections</p>
         {items.map((item) => {

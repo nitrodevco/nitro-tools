@@ -41,7 +41,7 @@ function FrameRow({ name, frame, onChange, onRemove }: FrameRowProps) {
           </Field>
           <div className="space-y-2">
             <p className="text-xs text-muted-foreground font-medium">Frame Rect</p>
-            <div className="grid grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               <Field label="X"><Input type="number" value={frame.frame.x} onChange={(e) => updFrame({ x: Number(e.target.value) })} className="h-7 text-xs" /></Field>
               <Field label="Y"><Input type="number" value={frame.frame.y} onChange={(e) => updFrame({ y: Number(e.target.value) })} className="h-7 text-xs" /></Field>
               <Field label="W"><Input type="number" value={frame.frame.w} onChange={(e) => updFrame({ w: Number(e.target.value) })} className="h-7 text-xs" /></Field>
@@ -50,7 +50,7 @@ function FrameRow({ name, frame, onChange, onRemove }: FrameRowProps) {
           </div>
           <div className="space-y-2">
             <p className="text-xs text-muted-foreground font-medium">Sprite Source Size</p>
-            <div className="grid grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               <Field label="X"><Input type="number" value={frame.spriteSourceSize.x} onChange={(e) => updSrc({ x: Number(e.target.value) })} className="h-7 text-xs" /></Field>
               <Field label="Y"><Input type="number" value={frame.spriteSourceSize.y} onChange={(e) => updSrc({ y: Number(e.target.value) })} className="h-7 text-xs" /></Field>
               <Field label="W"><Input type="number" value={frame.spriteSourceSize.w} onChange={(e) => updSrc({ w: Number(e.target.value) })} className="h-7 text-xs" /></Field>

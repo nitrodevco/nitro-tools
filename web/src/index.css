@@ -60,6 +60,12 @@
   .scrollbar-thin::-webkit-scrollbar-thumb {
     @apply bg-border rounded-full;
   }
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 /* Smooth animations */
