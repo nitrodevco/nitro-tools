@@ -1,22 +1,18 @@
-import { FigureLibraryPartXML, FigureLibraryXML, FigureMapXML, IFigureMap, IFigureMapLibrary, IFigureMapLibraryPart } from '../core';
+import type { FigureLibraryPartXML, FigureLibraryXML, IFigureMap, IFigureMapLibrary, IFigureMapLibraryPart } from '../core';
+import { FigureMapXML } from '../core';
 
-export class FigureMapMapper
-{
-    public static mapXML(xml: any, output: IFigureMap): void
-    {
+export class FigureMapMapper {
+    public static mapXML(xml: any, output: IFigureMap): void {
         if (!xml || !output) return;
 
         if (xml.map !== undefined) FigureMapMapper.mapFigureMapXML(new FigureMapXML(xml.map), output);
     }
 
-    private static mapFigureMapXML(xml: FigureMapXML, output: IFigureMap): void
-    {
+    private static mapFigureMapXML(xml: FigureMapXML, output: IFigureMap): void {
         if (!xml || !output) return;
 
-        if (xml.libraries !== undefined)
-        {
-            if (xml.libraries.length)
-            {
+        if (xml.libraries !== undefined) {
+            if (xml.libraries.length) {
                 output.libraries = [];
 
                 FigureMapMapper.mapFigureMapLibrariesXML(xml.libraries, output.libraries);
@@ -24,21 +20,17 @@ export class FigureMapMapper
         }
     }
 
-    private static mapFigureMapLibrariesXML(xml: FigureLibraryXML[], output: IFigureMapLibrary[]): void
-    {
+    private static mapFigureMapLibrariesXML(xml: FigureLibraryXML[], output: IFigureMapLibrary[]): void {
         if (!xml || !xml.length || !output) return;
 
-        for (const libraryXML of xml)
-        {
+        for (const libraryXML of xml) {
             const library: IFigureMapLibrary = {};
 
             if (libraryXML.id !== undefined) library.id = libraryXML.id;
             if (libraryXML.revision !== undefined) library.revision = libraryXML.revision;
 
-            if (libraryXML.parts !== undefined)
-            {
-                if (libraryXML.parts.length)
-                {
+            if (libraryXML.parts !== undefined) {
+                if (libraryXML.parts.length) {
                     library.parts = [];
 
                     FigureMapMapper.mapFigureMapLibraryPartsXML(libraryXML.parts, library.parts);
@@ -49,12 +41,10 @@ export class FigureMapMapper
         }
     }
 
-    private static mapFigureMapLibraryPartsXML(xml: FigureLibraryPartXML[], output: IFigureMapLibraryPart[]): void
-    {
+    private static mapFigureMapLibraryPartsXML(xml: FigureLibraryPartXML[], output: IFigureMapLibraryPart[]): void {
         if (!xml || !xml.length || !output) return;
 
-        for (const libraryPartXML of xml)
-        {
+        for (const libraryPartXML of xml) {
             const libraryPart: IFigureMapLibraryPart = {};
 
             if (libraryPartXML.id !== undefined) libraryPart.id = libraryPartXML.id;

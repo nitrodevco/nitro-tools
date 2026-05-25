@@ -1,9 +1,7 @@
 import lzma from 'lzma-native';
 
-export const DecompressLZMA = async (buffer: Buffer): Promise<Buffer> =>
-{
-    return new Promise((resolve, reject) =>
-    {
+export const DecompressLZMA = async (buffer: Buffer): Promise<Buffer> => {
+    return new Promise((resolve, reject) => {
         const properties = buffer.slice(12, 17);
         const compressedData = buffer.slice(17, buffer.length - 4);
         const uncompressedSize = buffer.readUInt32LE(buffer.length - 4);
@@ -16,12 +14,10 @@ export const DecompressLZMA = async (buffer: Buffer): Promise<Buffer> =>
         const chunks = [];
 
         decompressor.on('data', chunk => chunks.push(chunk));
-        decompressor.on('end', () =>
-        {
+        decompressor.on('end', () => {
             const decompressedBuffer = Buffer.concat(chunks);
 
-            if (decompressedBuffer.length !== uncompressedSize)
-            {
+            if (decompressedBuffer.length !== uncompressedSize) {
                 reject(new Error('Decompressed size does not match the expected size.'));
 
                 return;

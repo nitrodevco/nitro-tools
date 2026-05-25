@@ -1,22 +1,18 @@
-import { HabboAvatarActionsActionParamXML, HabboAvatarActionsActionTypeXML, HabboAvatarActionsActionXML, HabboAvatarActionsXML, IHabboAvatarActions, IHabboAvatarActionsAction, IHabboAvatarActionsActionParam, IHabboAvatarActionsActionType } from '../core';
+import type { HabboAvatarActionsActionParamXML, HabboAvatarActionsActionTypeXML, HabboAvatarActionsActionXML, IHabboAvatarActions, IHabboAvatarActionsAction, IHabboAvatarActionsActionParam, IHabboAvatarActionsActionType } from '../core';
+import { HabboAvatarActionsXML } from '../core';
 
-export class HabboAvatarActionsMapper
-{
-    public static mapXML(xml: any, output: IHabboAvatarActions): void
-    {
+export class HabboAvatarActionsMapper {
+    public static mapXML(xml: any, output: IHabboAvatarActions): void {
         if (!xml || !output) return;
 
         if (xml.actions !== undefined) HabboAvatarActionsMapper.mapHabboAvatarActionsMainXML(new HabboAvatarActionsXML(xml.actions), output);
     }
 
-    private static mapHabboAvatarActionsMainXML(xml: HabboAvatarActionsXML, output: IHabboAvatarActions): void
-    {
+    private static mapHabboAvatarActionsMainXML(xml: HabboAvatarActionsXML, output: IHabboAvatarActions): void {
         if (!xml || !output) return;
 
-        if (xml.actions !== undefined)
-        {
-            if (xml.actions.length)
-            {
+        if (xml.actions !== undefined) {
+            if (xml.actions.length) {
                 output.actions = [];
 
                 HabboAvatarActionsMapper.mapHabboAvatarActionsXML(xml.actions, output.actions);
@@ -24,12 +20,10 @@ export class HabboAvatarActionsMapper
         }
     }
 
-    private static mapHabboAvatarActionsXML(xml: HabboAvatarActionsActionXML[], output: IHabboAvatarActionsAction[]): void
-    {
+    private static mapHabboAvatarActionsXML(xml: HabboAvatarActionsActionXML[], output: IHabboAvatarActionsAction[]): void {
         if (!xml || !xml.length || !output) return;
 
-        for (const actionXML of xml)
-        {
+        for (const actionXML of xml) {
             const action: IHabboAvatarActionsAction = {};
 
             if (actionXML.id !== undefined) action.id = actionXML.id;
@@ -46,15 +40,13 @@ export class HabboAvatarActionsMapper
             if (actionXML.lay !== undefined) action.lay = actionXML.lay;
             if (actionXML.prevents !== undefined) action.prevents = actionXML.prevents;
 
-            if (actionXML.types !== undefined)
-            {
+            if (actionXML.types !== undefined) {
                 action.types = [];
 
                 HabboAvatarActionsMapper.mapHabboAvatarActionTypesXML(actionXML.types, action.types);
             }
 
-            if (actionXML.params !== undefined)
-            {
+            if (actionXML.params !== undefined) {
                 action.params = [];
 
                 HabboAvatarActionsMapper.mapHabboAvatarActionParamsXML(actionXML.params, action.params);
@@ -64,12 +56,10 @@ export class HabboAvatarActionsMapper
         }
     }
 
-    private static mapHabboAvatarActionTypesXML(xml: HabboAvatarActionsActionTypeXML[], output: IHabboAvatarActionsActionType[]): void
-    {
+    private static mapHabboAvatarActionTypesXML(xml: HabboAvatarActionsActionTypeXML[], output: IHabboAvatarActionsActionType[]): void {
         if (!xml || !xml.length || !output) return;
 
-        for (const typeXML of xml)
-        {
+        for (const typeXML of xml) {
             const type: IHabboAvatarActionsActionType = {};
 
             if (typeXML.id !== undefined) type.id = typeXML.id;
@@ -81,12 +71,10 @@ export class HabboAvatarActionsMapper
         }
     }
 
-    private static mapHabboAvatarActionParamsXML(xml: HabboAvatarActionsActionParamXML[], output: IHabboAvatarActionsActionParam[]): void
-    {
+    private static mapHabboAvatarActionParamsXML(xml: HabboAvatarActionsActionParamXML[], output: IHabboAvatarActionsActionParam[]): void {
         if (!xml || !xml.length || !output) return;
 
-        for (const paramXML of xml)
-        {
+        for (const paramXML of xml) {
             const param: IHabboAvatarActionsActionParam = {};
 
             if (paramXML.id !== undefined) param.id = paramXML.id;

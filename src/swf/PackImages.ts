@@ -5,7 +5,9 @@ import type { ImageBundle } from '../utils';
 import { SpriteBundle } from '../utils';
 
 export const PackImages = async (imageBundle: ImageBundle, config?: TexturePackerOptions) => {
-    const files = await packAsync(imageBundle.images, config);
+    if (!imageBundle) return null;
+
+    const files = await packAsync(Object.keys(imageBundle.images).map(key => ({ path: key, contents: imageBundle.images[key] })), config);
     const bundle = new SpriteBundle();
 
     for (const item of files) {

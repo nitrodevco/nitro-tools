@@ -1,4 +1,4 @@
-import { wrap } from 'bytebuffer';
+import bytebuffer from 'bytebuffer';
 import { parseStringPromise } from 'xml2js';
 
 import type { IAssetData } from '../core';
@@ -115,7 +115,7 @@ export class SWFUtilities {
 
         if (!binaryData || !binaryData.binaryDataBuffer) return null;
 
-        const byteBuffer = wrap(binaryData.binaryDataBuffer);
+        const byteBuffer = bytebuffer.wrap(binaryData.binaryDataBuffer);
 
         const paletteColors: [number, number, number][] = [];
 
@@ -146,6 +146,8 @@ export class SWFUtilities {
     public static async mapXML2JSON(habboAssetSWF: HabboAssetSWF, assetType: string, snakeCase: boolean = false): Promise<IAssetData> {
         if (!habboAssetSWF) return null;
 
+        const imageBundle = habboAssetSWF.getImageBundle();
+
         const output: IAssetData = {};
 
         if (assetType) output.type = assetType;
@@ -164,6 +166,22 @@ export class SWFUtilities {
 
         if (assetXML) {
             AssetMapper.mapXML(assetXML, output);
+
+            const assets = output.assets.filter(x => !x.name.includes('_32_'));
+
+            for (const asset of assets) {
+                if (asset.source !== undefined) {
+                    asset.source = imageBundle.sources[asset.source] ?? asset.source;
+
+                    if (imageBundle.getImage(asset.source) === undefined) {
+                        delete asset.source;
+                        console.log(`Source '${asset.source}' for asset '${asset.name}' not found in image bundle!`, Object.keys(imageBundle.images));
+                    }
+                }
+
+                if (asset.source) imageBundle.addImageReference(asset.source);
+                else imageBundle.addImageReference(asset.name);
+            }
 
             if (output.palettes !== undefined) {
                 for (const paletteId in output.palettes) {
@@ -194,11 +212,11 @@ export class SWFUtilities {
 
         if (logicXML) LogicMapper.mapXML(logicXML, output);
 
-        const visualizationXML = await this.getVisualizationXML(habboAssetSWF, snakeCase);
+        let visualizationXML = await this.getVisualizationXML(habboAssetSWF, snakeCase);
 
         if (visualizationXML) VisualizationMapper.mapXML(visualizationXML, output);
         else {
-            const visualizationXML = await this.getRoomVisualizationXML(habboAssetSWF, snakeCase);
+            visualizationXML = await this.getRoomVisualizationXML(habboAssetSWF, snakeCase);
 
             if (visualizationXML) RoomVisualizationMapper.mapXML(visualizationXML, output);
         }

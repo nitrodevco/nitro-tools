@@ -1,22 +1,18 @@
-import { EffectMapEffectXML, EffectMapXML, IEffectMap, IEffectMapLibrary } from '../core';
+import type { EffectMapEffectXML, IEffectMap, IEffectMapLibrary } from '../core';
+import { EffectMapXML } from '../core';
 
-export class EffectMapMapper
-{
-    public static mapXML(xml: any, output: IEffectMap): void
-    {
+export class EffectMapMapper {
+    public static mapXML(xml: any, output: IEffectMap): void {
         if (!xml || !output) return;
 
         if (xml.map !== undefined) EffectMapMapper.mapEffectMapXML(new EffectMapXML(xml.map), output);
     }
 
-    private static mapEffectMapXML(xml: EffectMapXML, output: IEffectMap): void
-    {
+    private static mapEffectMapXML(xml: EffectMapXML, output: IEffectMap): void {
         if (!xml || !output) return;
 
-        if (xml.effects !== undefined)
-        {
-            if (xml.effects.length)
-            {
+        if (xml.effects !== undefined) {
+            if (xml.effects.length) {
                 output.effects = [];
 
                 EffectMapMapper.mapEffectMapLibrariesXML(xml.effects, output.effects);
@@ -24,12 +20,10 @@ export class EffectMapMapper
         }
     }
 
-    private static mapEffectMapLibrariesXML(xml: EffectMapEffectXML[], output: IEffectMapLibrary[]): void
-    {
+    private static mapEffectMapLibrariesXML(xml: EffectMapEffectXML[], output: IEffectMapLibrary[]): void {
         if (!xml || !xml.length || !output) return;
 
-        for (const libraryXML of xml)
-        {
+        for (const libraryXML of xml) {
             const library: IEffectMapLibrary = {};
 
             if (libraryXML.id !== undefined) library.id = libraryXML.id;

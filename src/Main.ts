@@ -1,5 +1,4 @@
-import config from 'config';
-import { CatalogBuilder, ConvertFurnitureSwfs, DownloadBadges, DownloadCatalogIcons, DownloadEffectSwfs, DownloadFigureSwfs, DownloadFurnitureIcons, DownloadFurnitureSwfs, DownloadGordon, DownloadPetSwfs, DownloadSounds, GetEffectMap, GetExternalTexts, GetExternalVariables, GetFigureData, GetFigureMap, GetFlashProduction, GetFurnitureData, GetHabboAvatarActions, GetProductData } from './actions';
+import { CatalogBuilder, ConvertFigureSwfs, DownloadBadges, DownloadCatalogIcons, DownloadEffectSwfs, DownloadFigureSwfs, DownloadFurnitureIcons, DownloadFurnitureSwfs, DownloadGordon, DownloadPetSwfs, DownloadSounds, GetEffectMap, GetExternalTexts, GetExternalVariables, GetFigureData, GetFigureMap, GetFlashProduction, GetFurnitureData, GetHabboAvatarActions, GetProductData } from './actions';
 
 const downloadFurniture = false;
 const downloadPets = false;
@@ -12,12 +11,8 @@ const downloadFurniIcons = false;
 const downloadGordon = false;
 const buildCatalog = false;
 
-const bootstrap = async () =>
-{
-    console.log(config);
-
-    try
-    {
+const bootstrap = async () => {
+    try {
         await GetFlashProduction();
 
         await Promise.allSettled([
@@ -33,38 +28,37 @@ const bootstrap = async () =>
 
         const promises: Promise<void>[] = [];
 
-        downloadFurniture && promises.push(DownloadFurnitureSwfs());
-        downloadPets && promises.push(DownloadPetSwfs());
-        downloadEffects && promises.push(DownloadEffectSwfs());
-        downloadFigures && promises.push(DownloadFigureSwfs());
-        downloadBadges && promises.push(DownloadBadges());
-        downloadSounds && promises.push(DownloadSounds());
-        downloadCatalogIcons && promises.push(DownloadCatalogIcons());
-        downloadFurniIcons && promises.push(DownloadFurnitureIcons());
-        downloadGordon && promises.push(DownloadGordon());
+        if (downloadFurniture) promises.push(DownloadFurnitureSwfs());
+        if (downloadPets) promises.push(DownloadPetSwfs());
+        if (downloadEffects) promises.push(DownloadEffectSwfs());
+        if (downloadFigures) promises.push(DownloadFigureSwfs());
+        if (downloadBadges) promises.push(DownloadBadges());
+        if (downloadSounds) promises.push(DownloadSounds());
+        if (downloadCatalogIcons) promises.push(DownloadCatalogIcons());
+        if (downloadFurniIcons) promises.push(DownloadFurnitureIcons());
+        if (downloadGordon) promises.push(DownloadGordon());
 
         await Promise.allSettled(promises);
 
         await Promise.allSettled([
             //ConvertEffectSwfs(),
-            //ConvertFigureSwfs(),
-            ConvertFurnitureSwfs(),
+            ConvertFigureSwfs(),
+            //ConvertFurnitureSwfs(),
             //ConvertPetSwfs()
         ]);
 
         const catalog = new CatalogBuilder();
 
-        buildCatalog && await catalog.init();
+        if (buildCatalog) await catalog.init();
 
         console.log('Finished');
 
         process.exit(0);
     }
 
-    catch (err)
-    {
+    catch (err) {
         console.error(err);
     }
 };
 
-bootstrap();
+void bootstrap();

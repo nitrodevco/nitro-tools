@@ -1,21 +1,20 @@
 import { join } from 'path';
+
 import { ExtractSwfFromBuffer, GenerateNitroBundleFromSwf } from '../swf';
 import { FetchBuffer, NitroConfiguration, SaveBuffer } from '../utils';
 import { GetFigureMap } from './GetFigureMap';
 
 const batchCount: number = 100;
 
-export const ConvertFigureSwfs = async () =>
-{
+export const ConvertFigureSwfs = async () => {
     const figureMap = await GetFigureMap();
 
-    if(!figureMap || !figureMap.libraries || !figureMap.libraries.length) return;
+    if (!figureMap || !figureMap.libraries || !figureMap.libraries.length) return;
 
     let promises: Promise<void>[] = [];
     let count = 0;
 
-    for(const library of figureMap.libraries)
-    {
+    for (const library of figureMap.libraries) {
         promises.push(
             FetchBuffer({ url: join(NitroConfiguration.outputPath, `./swf/figures/${library.id}.swf`) })
                 .then(buffer => ExtractSwfFromBuffer(buffer))
@@ -26,8 +25,7 @@ export const ConvertFigureSwfs = async () =>
 
         count++;
 
-        if(count === batchCount)
-        {
+        if (count === batchCount) {
             await Promise.allSettled(promises);
 
             promises = [];
@@ -35,8 +33,7 @@ export const ConvertFigureSwfs = async () =>
         }
     }
 
-    if(count > 0)
-    {
+    if (count > 0) {
         await Promise.allSettled(promises);
 
         promises = [];

@@ -1,9 +1,8 @@
-import { IAssetData, IAssetLogicData, IAssetLogicPlanetSystem, IParticleSystem, IParticleSystemEmitter, IParticleSystemParticle, IParticleSystemSimulation, LogicXML, ParticleSystemEmitterXML, ParticleSystemObjectXML, ParticleSystemParticleXML, ParticleSystemSimulationXML, PlanetSystemObjectXML } from '../../core';
+import type { IAssetData, IAssetLogicData, IAssetLogicPlanetSystem, IParticleSystem, IParticleSystemEmitter, IParticleSystemParticle, IParticleSystemSimulation, ParticleSystemEmitterXML, ParticleSystemObjectXML, ParticleSystemParticleXML, ParticleSystemSimulationXML, PlanetSystemObjectXML } from '../../core';
+import { LogicXML } from '../../core';
 
-export class LogicMapper
-{
-    public static mapXML(logic: any, output: IAssetData): void
-    {
+export class LogicMapper {
+    public static mapXML(logic: any, output: IAssetData): void {
         if (!logic || !output) return;
 
         output.logic = {};
@@ -11,16 +10,13 @@ export class LogicMapper
         LogicMapper.mapLogicXML(new LogicXML(logic.objectData), output.logic);
     }
 
-    private static mapLogicXML(xml: LogicXML, output: IAssetLogicData): void
-    {
+    private static mapLogicXML(xml: LogicXML, output: IAssetLogicData): void {
         if (!xml || !output) return;
 
-        if (xml.model !== undefined)
-        {
+        if (xml.model !== undefined) {
             output.model = {};
 
-            if (xml.model.dimensions !== undefined)
-            {
+            if (xml.model.dimensions !== undefined) {
                 output.model.dimensions = {
                     x: xml.model.dimensions.x,
                     y: xml.model.dimensions.y
@@ -31,16 +27,13 @@ export class LogicMapper
                 if (xml.model.dimensions.centerZ !== undefined) output.model.dimensions.centerZ = xml.model.dimensions.centerZ;
             }
 
-            if (xml.model.directions !== undefined)
-            {
+            if (xml.model.directions !== undefined) {
                 const directions: number[] = [];
 
-                if (!xml.model.directions.length)
-                {
+                if (!xml.model.directions.length) {
                     directions.push(0);
                 }
-                else
-                {
+                else {
                     for (const direction of xml.model.directions) directions.push(parseInt(direction.id.toString()));
                 }
 
@@ -48,17 +41,14 @@ export class LogicMapper
             }
         }
 
-        if (xml.action !== undefined)
-        {
+        if (xml.action !== undefined) {
             output.action = {};
 
-            if (xml.action.link !== undefined)
-            {
+            if (xml.action.link !== undefined) {
                 output.action.link = xml.action.link;
             }
 
-            if (xml.action.startState !== undefined)
-            {
+            if (xml.action.startState !== undefined) {
                 output.action.startState = xml.action.startState;
             }
         }
@@ -67,34 +57,29 @@ export class LogicMapper
 
         if (xml.credits !== undefined) output.credits = xml.credits.value;
 
-        if (xml.soundSample !== undefined)
-        {
+        if (xml.soundSample !== undefined) {
             output.soundSample = {
                 id: xml.soundSample.id,
                 noPitch: xml.soundSample.noPitch
             };
         }
 
-        if (xml.planetSystem !== undefined)
-        {
+        if (xml.planetSystem !== undefined) {
             output.planetSystems = [];
 
             if (xml.planetSystem.objects !== undefined) LogicMapper.mapPlanetSystemXML(xml.planetSystem.objects, output.planetSystems);
         }
 
-        if (xml.particleSystem !== undefined)
-        {
+        if (xml.particleSystem !== undefined) {
             output.particleSystems = [];
 
             if (xml.particleSystem.objects !== undefined) LogicMapper.mapParticleSystemXML(xml.particleSystem.objects, output.particleSystems);
         }
 
-        if (xml.customVars !== undefined)
-        {
+        if (xml.customVars !== undefined) {
             output.customVars = {};
 
-            if (xml.customVars.variables !== undefined)
-            {
+            if (xml.customVars.variables !== undefined) {
                 output.customVars.variables = [];
 
                 for (const customVar of xml.customVars.variables) output.customVars.variables.push(customVar);
@@ -102,12 +87,10 @@ export class LogicMapper
         }
     }
 
-    private static mapPlanetSystemXML(xml: PlanetSystemObjectXML[], output: IAssetLogicPlanetSystem[]): void
-    {
+    private static mapPlanetSystemXML(xml: PlanetSystemObjectXML[], output: IAssetLogicPlanetSystem[]): void {
         if (!xml || !xml.length || !output) return;
 
-        for (const planetSystemObjectXML of xml)
-        {
+        for (const planetSystemObjectXML of xml) {
             const planetObject: IAssetLogicPlanetSystem = {};
 
             if (planetSystemObjectXML.id !== undefined) planetObject.id = planetSystemObjectXML.id;
@@ -123,17 +106,10 @@ export class LogicMapper
         }
     }
 
-    private static mapParticleSystemXML(xml: ParticleSystemObjectXML[], output: IParticleSystem[]): void
-    {
+    private static mapParticleSystemXML(xml: ParticleSystemObjectXML[], output: IParticleSystem[]): void {
         if (!xml || !xml.length || !output) return;
 
-        for (const particleSystemXML of xml)
-        {
-            if (particleSystemXML.size !== undefined)
-            {
-                if ([32].indexOf(particleSystemXML.size) >= 0) continue;
-            }
-
+        for (const particleSystemXML of xml) {
             const particleObject: IParticleSystem = {};
 
             if (particleSystemXML.size !== undefined) particleObject.size = particleSystemXML.size;
@@ -142,10 +118,8 @@ export class LogicMapper
             if (particleSystemXML.blend !== undefined) particleObject.blend = particleSystemXML.blend;
             if (particleSystemXML.bgColor !== undefined) particleObject.bgColor = particleSystemXML.bgColor;
 
-            if (particleSystemXML.emitters !== undefined)
-            {
-                if (particleSystemXML.emitters.length)
-                {
+            if (particleSystemXML.emitters !== undefined) {
+                if (particleSystemXML.emitters.length) {
                     particleObject.emitters = [];
 
                     LogicMapper.mapParticleSystemEmitterXML(particleSystemXML.emitters, particleObject.emitters);
@@ -156,12 +130,10 @@ export class LogicMapper
         }
     }
 
-    private static mapParticleSystemEmitterXML(xml: ParticleSystemEmitterXML[], output: IParticleSystemEmitter[]): void
-    {
+    private static mapParticleSystemEmitterXML(xml: ParticleSystemEmitterXML[], output: IParticleSystemEmitter[]): void {
         if (!xml || !xml.length || !output) return;
 
-        for (const particleSystemEmitterXML of xml)
-        {
+        for (const particleSystemEmitterXML of xml) {
             const particleEmitter: IParticleSystemEmitter = {};
 
             if (particleSystemEmitterXML.id !== undefined) particleEmitter.id = particleSystemEmitterXML.id;
@@ -172,17 +144,14 @@ export class LogicMapper
             if (particleSystemEmitterXML.burstPulse !== undefined) particleEmitter.burstPulse = particleSystemEmitterXML.burstPulse;
             if (particleSystemEmitterXML.fuseTime !== undefined) particleEmitter.fuseTime = particleSystemEmitterXML.fuseTime;
 
-            if (particleSystemEmitterXML.simulation !== undefined)
-            {
+            if (particleSystemEmitterXML.simulation !== undefined) {
                 particleEmitter.simulation = {};
 
                 LogicMapper.mapParticleSystemSimulationXML(particleSystemEmitterXML.simulation, particleEmitter.simulation);
             }
 
-            if (particleSystemEmitterXML.particles !== undefined)
-            {
-                if (particleSystemEmitterXML.particles.length)
-                {
+            if (particleSystemEmitterXML.particles !== undefined) {
+                if (particleSystemEmitterXML.particles.length) {
                     particleEmitter.particles = [];
 
                     LogicMapper.mapParticleSystemParticleXML(particleSystemEmitterXML.particles, particleEmitter.particles);
@@ -193,8 +162,7 @@ export class LogicMapper
         }
     }
 
-    private static mapParticleSystemSimulationXML(xml: ParticleSystemSimulationXML, output: IParticleSystemSimulation): void
-    {
+    private static mapParticleSystemSimulationXML(xml: ParticleSystemSimulationXML, output: IParticleSystemSimulation): void {
         if (!xml || !output) return;
 
         if (xml.force !== undefined) output.force = xml.force;
@@ -205,22 +173,18 @@ export class LogicMapper
         if (xml.energy !== undefined) output.energy = xml.energy;
     }
 
-    private static mapParticleSystemParticleXML(xml: ParticleSystemParticleXML[], output: IParticleSystemParticle[]): void
-    {
+    private static mapParticleSystemParticleXML(xml: ParticleSystemParticleXML[], output: IParticleSystemParticle[]): void {
         if (!xml || !xml.length || !output) return;
 
-        for (const particleSystemParticleXML of xml)
-        {
+        for (const particleSystemParticleXML of xml) {
             const particle: IParticleSystemParticle = {};
 
             if (particleSystemParticleXML.isEmitter !== undefined) particle.isEmitter = particleSystemParticleXML.isEmitter;
             if (particleSystemParticleXML.lifeTime !== undefined) particle.lifeTime = particleSystemParticleXML.lifeTime;
             if (particleSystemParticleXML.fade !== undefined) particle.fade = particleSystemParticleXML.fade;
 
-            if (particleSystemParticleXML.frames !== undefined)
-            {
-                if (particleSystemParticleXML.frames.length)
-                {
+            if (particleSystemParticleXML.frames !== undefined) {
+                if (particleSystemParticleXML.frames.length) {
                     particle.frames = particleSystemParticleXML.frames;
                 }
             }

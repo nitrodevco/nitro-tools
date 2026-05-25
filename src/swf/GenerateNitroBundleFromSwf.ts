@@ -1,12 +1,13 @@
 import { GenerateSpriteSheet } from './GenerateSpritesheet';
-import { HabboAssetSWF } from './HabboAssetSWF';
+import type { HabboAssetSWF } from './HabboAssetSWF';
 import { SWFUtilities } from './SWFUtilities';
 
 export const GenerateNitroBundleFromSwf = async (habboAssetSWF: HabboAssetSWF, assetType: string = null) => {
     if (!habboAssetSWF) return null;
 
-    const spriteBundle = await GenerateSpriteSheet(habboAssetSWF, 'Pixi' as any);
+    const imageBundle = habboAssetSWF.getImageBundle();
     const assetData = await SWFUtilities.mapXML2JSON(habboAssetSWF, assetType);
+    const spriteBundle = await GenerateSpriteSheet(imageBundle, 'Pixi' as any);
 
     let assetName = habboAssetSWF.getDocumentClass();
 

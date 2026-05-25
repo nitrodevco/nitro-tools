@@ -1,76 +1,59 @@
-import { IAsset, IAssetAlias, IAssetData, ManifestLibraryAliasXML, ManifestLibraryAssetParamXML, ManifestLibraryAssetXML, ManifestLibraryXML, ManifestXML } from '../../core';
-import { IMAGE_SOURCES } from '../../swf';
+import type { IAsset, IAssetAlias, IAssetData, ManifestLibraryAliasXML, ManifestLibraryAssetParamXML, ManifestLibraryAssetXML, ManifestLibraryXML } from '../../core';
+import { ManifestXML } from '../../core';
 
-export class ManifestMapper
-{
-    public static mapXML(manifest: any, output: IAssetData): void
-    {
+export class ManifestMapper {
+    public static mapXML(manifest: any, output: IAssetData): void {
         if (!manifest || !output) return;
 
         ManifestMapper.mapManifestXML(new ManifestXML(manifest.manifest), output);
     }
 
-    private static mapManifestXML(xml: ManifestXML, output: IAssetData): void
-    {
+    private static mapManifestXML(xml: ManifestXML, output: IAssetData): void {
         if (!xml || !output) return;
 
         if (xml.library !== undefined) ManifestMapper.mapManifestLibraryXML(xml.library, output);
     }
 
-    private static mapManifestLibraryXML(xml: ManifestLibraryXML, output: IAssetData): void
-    {
+    private static mapManifestLibraryXML(xml: ManifestLibraryXML, output: IAssetData): void {
         if (!xml || !output) return;
 
-        if (xml.assets !== undefined)
-        {
-            if (xml.assets.length)
-            {
-                output.assets = {};
+        if (xml.assets !== undefined) {
+            if (xml.assets.length) {
+                output.assets = [];
 
                 ManifestMapper.mapManifestLibraryAssetXML(xml.assets, output.assets);
             }
         }
 
-        if (xml.aliases !== undefined)
-        {
-            if (xml.aliases.length)
-            {
-                output.aliases = {};
+        if (xml.aliases !== undefined) {
+            if (xml.aliases.length) {
+                output.aliases = [];
 
                 ManifestMapper.mapManifestLibraryAliasXML(xml.aliases, output.aliases);
             }
         }
     }
 
-    private static mapManifestLibraryAssetXML(xml: ManifestLibraryAssetXML[], output: { [index: string]: IAsset }): void
-    {
+    private static mapManifestLibraryAssetXML(xml: ManifestLibraryAssetXML[], output: IAsset[]): void {
         if (!xml || !xml.length || !output) return;
 
-        for (const libraryAssetXML of xml)
-        {
+        for (const libraryAssetXML of xml) {
             const asset: IAsset = {};
 
-            if (libraryAssetXML.name !== undefined)
-            {
-                if (libraryAssetXML.name.startsWith('sh_')) continue;
+            if (libraryAssetXML.name !== undefined) asset.name = libraryAssetXML.name;
 
-                if (libraryAssetXML.name.indexOf('_32_') >= 0) continue;
+            if (libraryAssetXML.param !== undefined) ManifestMapper.mapManifestLibraryAssetParamXML(libraryAssetXML.param, asset);
 
-                if (libraryAssetXML.param !== undefined) ManifestMapper.mapManifestLibraryAssetParamXML(libraryAssetXML.param, asset);
+            //if (IMAGE_SOURCES.has(libraryAssetXML.name)) asset.source = IMAGE_SOURCES.get(libraryAssetXML.name);
 
-                if (IMAGE_SOURCES.has(libraryAssetXML.name)) asset.source = IMAGE_SOURCES.get(libraryAssetXML.name);
-
-                output[libraryAssetXML.name] = asset;
-            }
+            output.push(asset);
         }
     }
 
-    private static mapManifestLibraryAssetParamXML(xml: ManifestLibraryAssetParamXML, output: IAsset): void
-    {
+    private static mapManifestLibraryAssetParamXML(xml: ManifestLibraryAssetParamXML, output: IAsset): void {
         if (!xml || !output) return;
 
-        if (xml.value !== undefined)
-        {
+        if (xml.value !== undefined) {
             const split = xml.value.split(',');
 
             output.x = parseInt(split[0]);
@@ -78,30 +61,18 @@ export class ManifestMapper
         }
     }
 
-    private static mapManifestLibraryAliasXML(xml: ManifestLibraryAliasXML[], output: { [index: string]: IAssetAlias }): void
-    {
+    private static mapManifestLibraryAliasXML(xml: ManifestLibraryAliasXML[], output: IAssetAlias[]): void {
         if (!xml || !xml.length || !output) return;
 
-        for (const libraryAliasXML of xml)
-        {
+        for (const libraryAliasXML of xml) {
             const alias: IAssetAlias = {};
 
-            if (libraryAliasXML.name !== undefined)
-            {
-                if (libraryAliasXML.link !== undefined)
-                {
-                    if (libraryAliasXML.link.startsWith('sh_')) continue;
+            if (libraryAliasXML.name !== undefined) alias.name = libraryAliasXML.name;
+            if (libraryAliasXML.link !== undefined) alias.link = libraryAliasXML.link;
+            if (libraryAliasXML.flipH !== undefined) alias.flipH = libraryAliasXML.flipH;
+            if (libraryAliasXML.flipH !== undefined) alias.flipV = libraryAliasXML.flipV;
 
-                    if (libraryAliasXML.link.indexOf('_32_') >= 0) continue;
-
-                    alias.link = libraryAliasXML.link;
-                }
-
-                if (libraryAliasXML.flipH !== undefined) alias.flipH = libraryAliasXML.flipH;
-                if (libraryAliasXML.flipH !== undefined) alias.flipV = libraryAliasXML.flipV;
-
-                output[libraryAliasXML.name] = alias;
-            }
+            output.push(alias);
         }
     }
 }
