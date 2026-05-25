@@ -24,7 +24,7 @@ export class ParticleSystemEmitterXML
             if(attributes.sprite_id !== undefined) this._spriteId = parseInt(attributes.sprite_id);
             if(attributes.max_num_particles !== undefined) this._maxNumParticles = parseInt(attributes.max_num_particles);
             if(attributes.particles_per_frame !== undefined) this._particlesPerFrame = parseInt(attributes.particles_per_frame);
-            if(attributes.burst_pulse !== undefined) this._burstPulse = parseInt(attributes.burst_pulse);
+            this._burstPulse = (attributes.burst_pulse !== undefined) ? parseInt(attributes.burst_pulse) : 1;
             if(attributes.fuse_time !== undefined) this._fuseTime = parseInt(attributes.fuse_time);
         }
 

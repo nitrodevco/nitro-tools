@@ -8,13 +8,13 @@ export class AnimationMapper
 
         if (animation.animation !== undefined)
         {
-            output.animations = {};
+            output.animations = [];
 
             AnimationMapper.mapAnimationXML(new EffectAnimationXML(animation.animation), output.animations);
         }
     }
 
-    private static mapAnimationXML(xml: EffectAnimationXML, output: { [index: string]: IAssetAnimation }): void
+    private static mapAnimationXML(xml: EffectAnimationXML, output: IAssetAnimation[]): void
     {
         if (!xml || !output) return;
 
@@ -104,7 +104,7 @@ export class AnimationMapper
             }
         }
 
-        output[xml.desc] = animation;
+        output.push(animation);
     }
 
     private static mapAnimationDirectionsXML(xml: DirectionOffsetXML[], output: IAssetAnimationDirection[]): void

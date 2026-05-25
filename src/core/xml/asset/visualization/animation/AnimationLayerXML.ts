@@ -6,8 +6,6 @@ export class AnimationLayerXML
     private readonly _loopCount: number;
     private readonly _frameRepeat: number;
     private readonly _random: number;
-    private readonly _randomStart: number;
-
     private readonly _frameSequences: FrameSequenceXML[];
 
     constructor(xml: any)
@@ -20,7 +18,6 @@ export class AnimationLayerXML
             if(attributes.loopCount !== undefined) this._loopCount = parseInt(attributes.loopCount);
             if(attributes.frameRepeat !== undefined) this._frameRepeat = parseInt(attributes.frameRepeat);
             if(attributes.random !== undefined) this._random = parseInt(attributes.random);
-            if(attributes.randomStart !== undefined) this._randomStart = parseInt(attributes.randomStart);
         }
 
         if((xml.frameSequence !== undefined) && Array.isArray(xml.frameSequence))
@@ -49,11 +46,6 @@ export class AnimationLayerXML
     public get random(): number
     {
         return this._random;
-    }
-
-    public get randomStart(): number
-    {
-        return this._randomStart;
     }
 
     public get frameSequences(): FrameSequenceXML[]

@@ -4,5 +4,5 @@ export interface IAssetVisualAnimationSequence
 {
     loopCount?: number;
     random?: number;
-    frames?: { [index: string]: IAssetVisualAnimationSequenceFrame };
+    frames?: IAssetVisualAnimationSequenceFrame[];
 }

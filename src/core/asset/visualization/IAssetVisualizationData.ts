@@ -10,10 +10,10 @@ export interface IAssetVisualizationData
     size?: number;
     layerCount?: number;
     angle?: number;
-    layers?: { [index: string]: IAssetVisualizationLayer };
-    colors?: { [index: string]: IAssetColor };
-    directions?: { [index: string]: IAssetVisualizationDirection };
-    animations?: { [index: string]: IAssetVisualAnimation };
+    layers?: IAssetVisualizationLayer[];
+    colors?: IAssetColor[];
+    directions?: IAssetVisualizationDirection[];
+    animations?: IAssetVisualAnimation[];
     defaultPosture?: string;
     postures?: { defaultPosture?: string, postures?: IAssetPosture[] };
     gestures?: IAssetGesture[];

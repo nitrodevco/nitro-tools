@@ -7,5 +7,5 @@ export interface IAssetVisualAnimationSequenceFrame
     y?: number;
     randomX?: number;
     randomY?: number;
-    offsets?: { [index: string]: IAssetVisualAnimationSequenceFrameOffset };
+    offsets?: IAssetVisualAnimationSequenceFrameOffset[];
 }

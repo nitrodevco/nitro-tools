@@ -5,6 +5,7 @@ import { IAssetPalette } from './IAssetPalette';
 import { IAssetLogicData } from './logic/IAssetLogicData';
 import { IAssetRoomVisualizationData } from './room-visualization';
 import { ISpritesheetData } from './spritesheet';
+
 import { IAssetVisualizationData } from './visualization';
 
 export interface IAssetData
@@ -15,10 +16,10 @@ export interface IAssetData
     logicType?: string;
     spritesheet?: ISpritesheetData;
     logic?: IAssetLogicData;
-    assets?: { [index: string]: IAsset };
-    aliases?: { [index: string]: IAssetAlias };
-    animations?: { [index: string]: IAssetAnimation };
-    palettes?: { [index: string]: IAssetPalette };
+    assets?: IAsset[];
+    aliases?: IAssetAlias[];
+    animations?: IAssetAnimation[];
+    palettes?: IAssetPalette[];
     visualizations?: IAssetVisualizationData[];
     roomVisualization?: IAssetRoomVisualizationData;
 }
