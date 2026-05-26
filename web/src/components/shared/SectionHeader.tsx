@@ -4,7 +4,7 @@ import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 
 interface SectionHeaderProps {
-  title: string;
+  title?: string;
   description?: string;
   count?: number;
   onAdd?: () => void;
@@ -14,22 +14,29 @@ interface SectionHeaderProps {
 
 export function SectionHeader({ title, description, count, onAdd, addLabel, children }: SectionHeaderProps) {
   return (
-    <div className="flex items-start justify-between mb-4">
+    <div className="flex items-start justify-between">
       <div>
-        <div className="flex items-center gap-2">
-          <h3 className="text-base font-semibold">{title}</h3>
-          {count !== undefined && (
-            <Badge variant="secondary" className="text-xs">
-              {count}
-            </Badge>
-          )}
-        </div>
+        {title && (
+          <div className="flex items-center gap-2">
+            <h3 className="text-sm font-semibold">{title}</h3>
+            {count !== undefined && (
+              <Badge variant="secondary" className="text-[10px] h-4 px-1.5 tabular-nums">
+                {count}
+              </Badge>
+            )}
+          </div>
+        )}
+        {!title && count !== undefined && (
+          <Badge variant="secondary" className="text-[10px] h-4 px-1.5 tabular-nums">
+            {count}
+          </Badge>
+        )}
         {description && <p className="text-xs text-muted-foreground mt-0.5">{description}</p>}
       </div>
       <div className="flex gap-2">
         {children}
         {onAdd && (
-          <Button size="sm" variant="outline" onClick={onAdd} className="gap-1 text-xs h-7">
+          <Button size="sm" variant="outline" onClick={onAdd} className="h-7 gap-1 text-xs">
             <Plus className="h-3 w-3" />
             {addLabel ?? 'Add'}
           </Button>

@@ -14,11 +14,13 @@ export function Field({ label, hint, children, className }: FieldProps) {
   return (
     <div className={`space-y-1 ${className ?? ''}`}>
       <div className="flex items-center gap-1.5">
-        <Label className="text-xs text-muted-foreground font-medium uppercase tracking-wider">{label}</Label>
+        <Label className="text-[11px] font-semibold text-muted-foreground/75 uppercase tracking-[0.04em]">
+          {label}
+        </Label>
         {hint && (
           <Tooltip>
             <TooltipTrigger asChild>
-              <Info className="h-3 w-3 text-muted-foreground cursor-help" />
+              <Info className="h-3 w-3 text-muted-foreground/50 cursor-help" />
             </TooltipTrigger>
             <TooltipContent>{hint}</TooltipContent>
           </Tooltip>
