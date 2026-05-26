@@ -164,45 +164,7 @@ export class SWFUtilities {
 
         if (!assetXML) assetXML = await this.getRoomAssetsXML(habboAssetSWF, snakeCase);
 
-        if (assetXML) {
-            AssetMapper.mapXML(assetXML, output);
-
-            const assets = output.assets.filter(x => !x.name.includes('_32_'));
-
-            for (const asset of assets) {
-                if (asset.source !== undefined) {
-                    asset.source = imageBundle.sources[asset.source] ?? asset.source;
-
-                    if (imageBundle.getImage(asset.source) === undefined) {
-                        delete asset.source;
-                        console.log(`Source '${asset.source}' for asset '${asset.name}' not found in image bundle!`, Object.keys(imageBundle.images));
-                    }
-                }
-
-                if (asset.source) imageBundle.addImageReference(asset.source);
-                else imageBundle.addImageReference(asset.name);
-            }
-
-            if (output.palettes !== undefined) {
-                for (const paletteId in output.palettes) {
-                    const palette = output.palettes[paletteId];
-
-                    const paletteColors = this.getPalette(habboAssetSWF, palette.source);
-
-                    if (!paletteColors) {
-                        delete output.palettes[paletteId];
-
-                        continue;
-                    }
-
-                    const rgbs: [number, number, number][] = [];
-
-                    for (const rgb of paletteColors) rgbs.push([rgb[0], rgb[1], rgb[2]]);
-
-                    palette.rgb = rgbs;
-                }
-            }
-        }
+        if (assetXML) AssetMapper.mapXML(assetXML, output);
 
         const animationXML = await this.getAnimationXML(habboAssetSWF, snakeCase);
 
@@ -219,6 +181,49 @@ export class SWFUtilities {
             visualizationXML = await this.getRoomVisualizationXML(habboAssetSWF, snakeCase);
 
             if (visualizationXML) RoomVisualizationMapper.mapXML(visualizationXML, output);
+        }
+
+        if (output.assets !== undefined) {
+            for (const asset of output.assets) {
+                if (asset.name.includes('_32_')) continue;
+
+                if (asset.source !== undefined) {
+                    asset.source = imageBundle.sources[asset.source] ?? asset.source;
+
+                    if (imageBundle.getImage(asset.source) === undefined) {
+                        delete asset.source;
+                        console.log(`Source '${asset.source}' for asset '${asset.name}' not found in image bundle!`);
+                    } else imageBundle.addImageReference(asset.source);
+                }
+
+                if (asset.name !== undefined && asset.source === undefined) {
+                    asset.name = imageBundle.sources[asset.name] ?? asset.name;
+
+                    if (imageBundle.getImage(asset.name) === undefined) {
+                        console.log(`Name '${asset.name}' for asset '${asset.name}' not found in image bundle!`);
+                    } else imageBundle.addImageReference(asset.name);
+                }
+            }
+        }
+
+        if (output.palettes !== undefined) {
+            for (const paletteId in output.palettes) {
+                const palette = output.palettes[paletteId];
+
+                const paletteColors = this.getPalette(habboAssetSWF, palette.source);
+
+                if (!paletteColors) {
+                    delete output.palettes[paletteId];
+
+                    continue;
+                }
+
+                const rgbs: [number, number, number][] = [];
+
+                for (const rgb of paletteColors) rgbs.push([rgb[0], rgb[1], rgb[2]]);
+
+                palette.rgb = rgbs;
+            }
         }
 
         return output;

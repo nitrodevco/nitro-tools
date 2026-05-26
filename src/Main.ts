@@ -40,12 +40,10 @@ const bootstrap = async () => {
 
         await Promise.allSettled(promises);
 
-        await Promise.allSettled([
-            //ConvertEffectSwfs(),
-            ConvertFigureSwfs(),
-            //ConvertFurnitureSwfs(),
-            //ConvertPetSwfs()
-        ]);
+        //ConvertEffectSwfs(),
+        await ConvertFigureSwfs();
+        //ConvertFurnitureSwfs(),
+        //ConvertPetSwfs()
 
         const catalog = new CatalogBuilder();
 

@@ -34,7 +34,7 @@ export class ImageBundle {
         this._sources[aliasName] = bitmapName;
     }
 
-    public get documnentClass(): string {
+    public get documentClass(): string {
         return this._documentClass;
     }
 
@@ -44,5 +44,9 @@ export class ImageBundle {
 
     public get sources(): { [index: string]: string } {
         return this._sources;
+    }
+
+    public get referencedImages(): string[] {
+        return this._referencedImages;
     }
 }

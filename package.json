@@ -18,7 +18,7 @@
     "type": "module",
     "scripts": {
         "build": "tsc",
-        "start:dev": "tsx src/Main.ts",
+        "dev": "tsx src/Main.ts",
         "start": "node ./dist/Main.js",
         "start:bundle": "yarn start --bundle",
         "start:extract": "yarn start --extract",

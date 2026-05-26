@@ -5,7 +5,7 @@ import { PackImages } from './PackImages';
 
 export const GenerateSpriteSheet = async (imageBundle: ImageBundle, exporter: PackerExporterType | PackerExporter) => {
     return await PackImages(imageBundle, {
-        textureName: imageBundle.documnentClass,
+        textureName: imageBundle.documentClass,
         width: 10240,
         height: 4320,
         fixedSize: false,

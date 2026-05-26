@@ -15,6 +15,8 @@ export const ConvertFigureSwfs = async () => {
     let count = 0;
 
     for (const library of figureMap.libraries) {
+        if (library.id.startsWith('hh_')) console.log('Processing', library.id);
+
         promises.push(
             FetchBuffer({ url: join(NitroConfiguration.outputPath, `./swf/figures/${library.id}.swf`) })
                 .then(buffer => ExtractSwfFromBuffer(buffer))
