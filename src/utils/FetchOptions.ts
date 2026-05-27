@@ -1,5 +1,5 @@
 import { Agent } from 'https';
-import { RequestInit } from 'node-fetch';
+import type { RequestInit } from 'node-fetch';
 
 export const FetchOptions = {
     agent: new Agent({

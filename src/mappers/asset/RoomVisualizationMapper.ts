@@ -200,7 +200,7 @@ export class RoomVisualizationMapper {
         if (!xml || !output) return;
 
         for (const planeMaterialXML of xml) {
-            if (!NitroConfiguration.convertSmallAssets) {
+            if (!NitroConfiguration.CONVERT_SMALL_ASSETS) {
                 if (planeMaterialXML.id.startsWith('floor_32_') || planeMaterialXML.id.startsWith('wall_32_') || planeMaterialXML.id.startsWith('landscape_32_')) continue;
             }
 
@@ -290,7 +290,7 @@ export class RoomVisualizationMapper {
         if (!xml || !output) return;
 
         for (const planeTextureXML of xml) {
-            if (!NitroConfiguration.convertSmallAssets) {
+            if (!NitroConfiguration.CONVERT_SMALL_ASSETS) {
                 if (planeTextureXML.id.startsWith('floor_32_') || planeTextureXML.id.startsWith('wall_32_') || planeTextureXML.id.startsWith('landscape_32_')) continue;
             }
 

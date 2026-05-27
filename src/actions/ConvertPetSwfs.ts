@@ -1,23 +1,26 @@
 import { join } from 'path';
+
 import { ExtractSwfFromBuffer, GenerateNitroBundleFromSwf } from '../swf';
-import { FetchBuffer, NitroConfiguration, SaveBuffer } from '../utils';
+import { FetchBuffer, File, NitroConfiguration, SaveBuffer } from '../utils';
 import { GetPetNames } from './GetPetNames';
 
-const batchCount: number = 100;
-
-export const ConvertPetSwfs = async () =>
-{
+export const ConvertPetSwfs = async () => {
     const petNames = await GetPetNames();
 
-    if(!petNames || !petNames.length) return;
+    if (!petNames || !petNames.length) return;
 
     let promises: Promise<void>[] = [];
     let count = 0;
 
-    for(const petName of petNames)
-    {
+    for (const petName of petNames) {
+        if (NitroConfiguration.SKIP_CONVERTED_ASSETS) {
+            const filePath = new File(join(NitroConfiguration.OUTPUT_PATH, `./pets/${petName}.nitro`));
+
+            if (filePath.exists()) continue;
+        }
+
         promises.push(
-            FetchBuffer({ url: join(NitroConfiguration.outputPath, `./swf/pets/${petName}.swf`) })
+            FetchBuffer({ url: join(NitroConfiguration.OUTPUT_PATH, `./swf/pets/${petName}.swf`) })
                 .then(buffer => ExtractSwfFromBuffer(buffer))
                 .then(habboAssetSwf => GenerateNitroBundleFromSwf(habboAssetSwf))
                 .then(nitroBundle => nitroBundle.toArrayBufferAsync())
@@ -26,8 +29,7 @@ export const ConvertPetSwfs = async () =>
 
         count++;
 
-        if(count === batchCount)
-        {
+        if (count === NitroConfiguration.BATCH_SIZE) {
             await Promise.allSettled(promises);
 
             promises = [];
@@ -35,8 +37,7 @@ export const ConvertPetSwfs = async () =>
         }
     }
 
-    if(count > 0)
-    {
+    if (count > 0) {
         await Promise.allSettled(promises);
 
         promises = [];

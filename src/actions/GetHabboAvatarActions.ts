@@ -1,15 +1,12 @@
-import { IHabboAvatarActions } from '../core';
+import type { IHabboAvatarActions } from '../core';
 import { HabboAvatarActionsMapper } from '../mappers';
 import { FetchText, NitroConfiguration, ParseXML, SaveJson } from '../utils';
 
 let habboAvatarActions: IHabboAvatarActions = null;
 
-export const GetHabboAvatarActions = async () =>
-{
-    try
-    {
-        if(!habboAvatarActions)
-        {
+export const GetHabboAvatarActions = async () => {
+    try {
+        if (!habboAvatarActions) {
             const xml = await ParseXML(await FetchText({ url: NitroConfiguration.habboAvatarActionsUrl }));
 
             habboAvatarActions = {};
@@ -20,8 +17,7 @@ export const GetHabboAvatarActions = async () =>
         }
     }
 
-    catch (err)
-    {
+    catch (err) {
         console.error(err?.message ?? err);
     }
 

@@ -1,16 +1,13 @@
-export class BinaryReader
-{
+export class BinaryReader {
     private _position: number;
-    private _dataView: DataView;
+    private _dataView: DataView<ArrayBuffer>;
 
-    constructor(buffer: ArrayBuffer)
-    {
+    constructor(buffer: ArrayBuffer) {
         this._position = 0;
         this._dataView = new DataView(buffer);
     }
 
-    public readByte(): number
-    {
+    public readByte(): number {
         const byte = this._dataView.getInt8(this._position);
 
         this._position++;
@@ -18,8 +15,7 @@ export class BinaryReader
         return byte;
     }
 
-    public readBytes(length: number): BinaryReader
-    {
+    public readBytes(length: number): BinaryReader {
         const buffer = new BinaryReader(this._dataView.buffer.slice(this._position, this._position + length));
 
         this._position += length;
@@ -27,8 +23,7 @@ export class BinaryReader
         return buffer;
     }
 
-    public readShort(): number
-    {
+    public readShort(): number {
         const short = this._dataView.getInt16(this._position);
 
         this._position += 2;
@@ -36,8 +31,7 @@ export class BinaryReader
         return short;
     }
 
-    public readInt(): number
-    {
+    public readInt(): number {
         const int = this._dataView.getInt32(this._position);
 
         this._position += 4;
@@ -45,18 +39,15 @@ export class BinaryReader
         return int;
     }
 
-    public remaining(): number
-    {
+    public remaining(): number {
         return this._dataView.byteLength - this._position;
     }
 
-    public toString(encoding?: string): string
-    {
+    public toString(encoding?: string): string {
         return new TextDecoder().decode(this._dataView.buffer);
     }
 
-    public toArrayBuffer(): ArrayBuffer
-    {
+    public toArrayBuffer(): ArrayBuffer {
         return this._dataView.buffer;
     }
 }

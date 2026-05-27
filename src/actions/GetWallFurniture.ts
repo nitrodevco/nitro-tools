@@ -1,21 +1,17 @@
-import { IFurnitureAlias, IFurnitureType } from '../core';
+import type { IFurnitureAlias, IFurnitureType } from '../core';
 import { GetFurnitureData } from './GetFurnitureData';
 import { GetPosterIds } from './GetPosterIds';
 
 let wallFurniture: IFurnitureType[] = null;
 
-export const GetWallFurniture = async () =>
-{
-    try
-    {
-        if(!wallFurniture)
-        {
+export const GetWallFurniture = async () => {
+    try {
+        if (!wallFurniture) {
             const furnitureData = await GetFurnitureData();
             const posterIds = await GetPosterIds();
 
             const aliases: IFurnitureAlias[] = [
-                ...posterIds.map(posterId =>
-                {
+                ...posterIds.map(posterId => {
                     return { name: 'poster', alias: `poster${posterId}` };
                 }),
                 { name: 'footylamp', alias: 'footylamp_campaign_ing' },
@@ -73,17 +69,15 @@ export const GetWallFurniture = async () =>
                 ...furnitureData.wallitemtypes.furnitype
             ];
 
-            for(const item of aliases)
-            {
+            for (const item of aliases) {
                 const furniture = wallFurniture.find(furniture => item.name === furniture.classname);
 
-                if(furniture) wallFurniture.push({ classname: item.alias, revision: furniture.revision, ...furniture });
+                if (furniture) wallFurniture.push({ classname: item.alias, revision: furniture.revision, ...furniture });
             }
         }
     }
 
-    catch (err)
-    {
+    catch (err) {
         console.error(err?.message ?? err);
     }
 

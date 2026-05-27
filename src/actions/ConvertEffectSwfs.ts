@@ -1,23 +1,27 @@
 import { join } from 'path';
+
 import { ExtractSwfFromBuffer, GenerateNitroBundleFromSwf } from '../swf';
-import { FetchBuffer, NitroConfiguration, SaveBuffer } from '../utils';
+import { FetchBuffer, File, NitroConfiguration, SaveBuffer } from '../utils';
 import { GetEffectMap } from './GetEffectMap';
 
-const batchCount: number = 100;
 
-export const ConvertEffectSwfs = async () =>
-{
+export const ConvertEffectSwfs = async () => {
     const effectMap = await GetEffectMap();
 
-    if(!effectMap || !effectMap.effects || !effectMap.effects.length) return;
+    if (!effectMap || !effectMap.effects || !effectMap.effects.length) return;
 
     let promises: Promise<void>[] = [];
     let count = 0;
 
-    for(const library of effectMap.effects)
-    {
+    for (const library of effectMap.effects) {
+        if (NitroConfiguration.SKIP_CONVERTED_ASSETS) {
+            const filePath = new File(join(NitroConfiguration.OUTPUT_PATH, `./effects/${library.lib}.nitro`));
+
+            if (filePath.exists()) continue;
+        }
+
         promises.push(
-            FetchBuffer({ url: join(NitroConfiguration.outputPath, `./swf/effects/${library.lib}.swf`) })
+            FetchBuffer({ url: join(NitroConfiguration.OUTPUT_PATH, `./swf/effects/${library.lib}.swf`) })
                 .then(buffer => ExtractSwfFromBuffer(buffer))
                 .then(habboAssetSwf => GenerateNitroBundleFromSwf(habboAssetSwf))
                 .then(nitroBundle => nitroBundle.toArrayBufferAsync())
@@ -26,8 +30,7 @@ export const ConvertEffectSwfs = async () =>
 
         count++;
 
-        if(count === batchCount)
-        {
+        if (count === NitroConfiguration.BATCH_SIZE) {
             await Promise.allSettled(promises);
 
             promises = [];
@@ -35,8 +38,7 @@ export const ConvertEffectSwfs = async () =>
         }
     }
 
-    if(count > 0)
-    {
+    if (count > 0) {
         await Promise.allSettled(promises);
 
         promises = [];

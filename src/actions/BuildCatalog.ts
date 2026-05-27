@@ -1,5 +1,6 @@
 import { DataSource } from 'typeorm';
-import { IFurnitureType } from '../core';
+
+import type { IFurnitureType } from '../core';
 import { CatalogOfferEntity } from '../entities/CatalogOfferEntity';
 import { CatalogPageEntity } from '../entities/CatalogPageEntity';
 import { CatalogProductEntity } from '../entities/CatalogProductEntity';
@@ -9,18 +10,16 @@ import { GetFloorFurniture } from './GetFloorFurniture';
 import { GetLogicForType } from './GetLogicForType';
 import { GetWallFurniture } from './GetWallFurniture';
 
-export class CatalogBuilder
-{
+export class CatalogBuilder {
     private _processedSpriteIds: Set<number> = new Set();
     private _floorTypes: Map<string, IFurnitureType> = new Map();
-    private _wallTypes : Map<string, IFurnitureType> = new Map();
+    private _wallTypes: Map<string, IFurnitureType> = new Map();
     private _defsByClassName: Map<string, FurnitureDefinitionEntity> = new Map();
     private _pages: Map<string, CatalogPageEntity> = new Map();
 
     private _dbCtx: DataSource = null;
 
-    public async init(): Promise<void>
-    {
+    public async init(): Promise<void> {
         this._dbCtx = await new DataSource({
             type: 'mysql',
             host: '127.0.0.1',
@@ -65,15 +64,14 @@ export class CatalogBuilder
         console.log(`Processing floor...`);
         const floorDefs = Array.from(this._defsByClassName.values()).filter(def => def.type === 0).sort((a, b) => a.spriteId - b.spriteId);
 
-        for(const floorDef of floorDefs)
-        {
-            var itemType = this._floorTypes.get(floorDef.name);
+        for (const floorDef of floorDefs) {
+            const itemType = this._floorTypes.get(floorDef.name);
 
-            if(!itemType) continue;
+            if (!itemType) continue;
 
             const page = await this.GetCatalogPageForType(itemType, tab.id);
 
-            if(!page) continue;
+            if (!page) continue;
 
             const offer = await this.GetCatalogOffer(page, floorDef);
             const product = new CatalogProductEntity();
@@ -93,15 +91,14 @@ export class CatalogBuilder
         console.log(`Processing wall...`);
         const wallDefs = Array.from(this._defsByClassName.values()).filter(def => def.type === 1).sort((a, b) => a.spriteId - b.spriteId);
 
-        for(const wallDef of wallDefs)
-        {
-            var itemType = this._wallTypes.get(wallDef.name);
+        for (const wallDef of wallDefs) {
+            const itemType = this._wallTypes.get(wallDef.name);
 
-            if(!itemType) continue;
+            if (!itemType) continue;
 
             const page = await this.GetCatalogPageForType(itemType, tab.id);
 
-            if(!page) continue;
+            if (!page) continue;
 
             const offer = await this.GetCatalogOffer(page, wallDef);
             const product = new CatalogProductEntity();
@@ -119,45 +116,39 @@ export class CatalogBuilder
         console.log(`Processed wall: ${wallDefs.length}`);
     }
 
-    private async ProcessFloorItems(): Promise<void>
-    {
+    private async ProcessFloorItems(): Promise<void> {
         const items = await GetFloorFurniture();
 
-        if(!items || !items.length) return;
+        if (!items || !items.length) return;
 
-        for(const item of items) await this.ProcessItem(item, false);
+        for (const item of items) await this.ProcessItem(item, false);
     };
 
-    private async ProcessWallItems(): Promise<void>
-    {
+    private async ProcessWallItems(): Promise<void> {
         const items = await GetWallFurniture();
 
-        if(!items || !items.length) return;
+        if (!items || !items.length) return;
 
-        for(const item of items) await this.ProcessItem(item, true);
+        for (const item of items) await this.ProcessItem(item, true);
     };
 
-    private async ProcessItem(item: IFurnitureType, isWall: boolean = false): Promise<void>
-    {
-        try
-        {
-            if(this._processedSpriteIds.has(item.id)) return;
+    private async ProcessItem(item: IFurnitureType, isWall: boolean = false): Promise<void> {
+        try {
+            if (this._processedSpriteIds.has(item.id)) return;
 
             const assetData = await GetAssetForClassName(item.classname.split('*')[0]);
 
-            if(!assetData) return;
+            if (!assetData) return;
 
             let totalStates = 0;
 
             const visualization = assetData.visualizations?.find(visualization => (visualization.size === 64));
 
-            if(visualization && visualization.animations)
-            {
-                for(const key of Object.keys(visualization.animations))
-                {
+            if (visualization && visualization.animations) {
+                for (const key of Object.keys(visualization.animations)) {
                     const animation = visualization.animations[key];
 
-                    if(!animation || animation.transitionTo || animation.transitionFrom) continue;
+                    if (!animation || animation.transitionTo || animation.transitionFrom) continue;
 
                     totalStates++;
                 }
@@ -169,7 +160,7 @@ export class CatalogBuilder
             const canSit = item.cansiton ?? false;
             const canLay = item.canlayon ?? false;
 
-            if(canSit || canLay) canWalk = true;
+            if (canSit || canLay) canWalk = true;
 
             entity.spriteId = item.id;
             entity.name = item.classname;
@@ -188,31 +179,29 @@ export class CatalogBuilder
             this._defsByClassName.set(entity.name, entity);
             this._processedSpriteIds.add(entity.spriteId);
 
-            isWall ? this._wallTypes.set(entity.name, item) : this._floorTypes.set(entity.name, item);
+            if (isWall) this._wallTypes.set(entity.name, item);
+            else this._floorTypes.set(entity.name, item);
         }
-        catch (error)
-        {
+        catch (error) {
             console.error(`Failed to process furniture definition for "${item.classname}": ${error?.message ?? error}`);
             return;
         }
     }
 
-    private async GetCatalogPageForType(furnitureType: IFurnitureType, parentId: number = null): Promise<CatalogPageEntity>
-    {
+    private async GetCatalogPageForType(furnitureType: IFurnitureType, parentId: number = null): Promise<CatalogPageEntity> {
         if (!furnitureType) return;
 
-        if(furnitureType.classname.startsWith('wf_'))
-        {
+        if (furnitureType.classname.startsWith('wf_')) {
             const parent = await this.CreatePage('wired', parentId);
 
             let pageName = "Wired";
 
-            if(furnitureType.classname.startsWith('wf_act_')) pageName = "Wired Actions";
-            else if(furnitureType.classname.startsWith('wf_cnd_')) pageName = "Wired Conditions";
-            else if(furnitureType.classname.startsWith('wf_slc_')) pageName = "Wired Selectors";
-            else if(furnitureType.classname.startsWith('wf_trg_')) pageName = "Wired Triggers";
-            else if(furnitureType.classname.startsWith('wf_var_')) pageName = "Wired Variables";
-            else if(furnitureType.classname.startsWith('wf_xtra_')) pageName = "Wired Extras";
+            if (furnitureType.classname.startsWith('wf_act_')) pageName = "Wired Actions";
+            else if (furnitureType.classname.startsWith('wf_cnd_')) pageName = "Wired Conditions";
+            else if (furnitureType.classname.startsWith('wf_slc_')) pageName = "Wired Selectors";
+            else if (furnitureType.classname.startsWith('wf_trg_')) pageName = "Wired Triggers";
+            else if (furnitureType.classname.startsWith('wf_var_')) pageName = "Wired Variables";
+            else if (furnitureType.classname.startsWith('wf_xtra_')) pageName = "Wired Extras";
             else pageName = "Other";
 
             return await this.CreatePage(pageName, parent.id);
@@ -239,12 +228,10 @@ export class CatalogBuilder
         return parentPage;
     }
 
-    private async CreatePage(pageName: string, parentId: number = null): Promise<CatalogPageEntity>
-    {
+    private async CreatePage(pageName: string, parentId: number = null): Promise<CatalogPageEntity> {
         let entity = this._pages.get(pageName);
 
-        if (!entity)
-        {
+        if (!entity) {
             entity = new CatalogPageEntity();
 
             entity.parentEntityId = parentId;
@@ -263,8 +250,7 @@ export class CatalogBuilder
         return entity;
     }
 
-    private async GetCatalogOffer(catalogPage: CatalogPageEntity, definition: FurnitureDefinitionEntity)
-    {
+    private async GetCatalogOffer(catalogPage: CatalogPageEntity, definition: FurnitureDefinitionEntity) {
         const entity = new CatalogOfferEntity();
 
         entity.pageEntityId = catalogPage.id;

@@ -1,3 +1,4 @@
+export * from './BuildCatalog';
 export * from './ConvertEffectSwfs';
 export * from './ConvertFigureSwfs';
 export * from './ConvertFurnitureSwfs';
@@ -25,4 +26,3 @@ export * from './GetHabboAvatarActions';
 export * from './GetPetNames';
 export * from './GetPosterIds';
 export * from './GetProductData';
-export * from './BuildCatalog';

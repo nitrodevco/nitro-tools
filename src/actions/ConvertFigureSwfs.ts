@@ -1,10 +1,8 @@
 import { join } from 'path';
 
 import { ExtractSwfFromBuffer, GenerateNitroBundleFromSwf } from '../swf';
-import { FetchBuffer, NitroConfiguration, SaveBuffer } from '../utils';
+import { FetchBuffer, File, NitroConfiguration, SaveBuffer } from '../utils';
 import { GetFigureMap } from './GetFigureMap';
-
-const batchCount: number = 100;
 
 export const ConvertFigureSwfs = async () => {
     const figureMap = await GetFigureMap();
@@ -15,10 +13,16 @@ export const ConvertFigureSwfs = async () => {
     let count = 0;
 
     for (const library of figureMap.libraries) {
-        if (library.id.startsWith('hh_')) console.log('Processing', library.id);
+        if (library.id === 'hh_human_fx' || library.id === 'hh_human_pets') continue;
+
+        if (NitroConfiguration.SKIP_CONVERTED_ASSETS) {
+            const filePath = new File(join(NitroConfiguration.OUTPUT_PATH, `./figures/${library.id}.nitro`));
+
+            if (filePath.exists()) continue;
+        }
 
         promises.push(
-            FetchBuffer({ url: join(NitroConfiguration.outputPath, `./swf/figures/${library.id}.swf`) })
+            FetchBuffer({ url: join(NitroConfiguration.OUTPUT_PATH, `./swf/figures/${library.id}.swf`) })
                 .then(buffer => ExtractSwfFromBuffer(buffer))
                 .then(habboAssetSwf => GenerateNitroBundleFromSwf(habboAssetSwf))
                 .then(nitroBundle => nitroBundle.toArrayBufferAsync())
@@ -27,7 +31,7 @@ export const ConvertFigureSwfs = async () => {
 
         count++;
 
-        if (count === batchCount) {
+        if (count === NitroConfiguration.BATCH_SIZE) {
             await Promise.allSettled(promises);
 
             promises = [];

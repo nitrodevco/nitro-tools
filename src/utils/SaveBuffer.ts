@@ -6,7 +6,7 @@ import { NitroConfiguration } from './NitroConfiguration';
 
 export const SaveBuffer = async (buffer: Buffer, destination: string) => {
     try {
-        const outputPath = join(NitroConfiguration.outputPath, destination);
+        const outputPath = join(NitroConfiguration.OUTPUT_PATH, destination);
 
         await mkdir(dirname(outputPath), { recursive: true });
 
