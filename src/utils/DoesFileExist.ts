@@ -7,9 +7,7 @@ export const DoesFileExist = async (path: string) => {
         return true;
     }
 
-    catch (err) {
-        console.error(err?.message ?? err);
-    }
+    catch (err) { /* empty */ }
 
     return false;
 };

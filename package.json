@@ -37,6 +37,7 @@
         "lzma-native": "^8.0.6",
         "mysql": "^2.18.1",
         "node-fetch": "^3.3.2",
+        "ora": "^9.4.0",
         "png-stream": "^1.0.5",
         "stream-to-array": "^2.3.0",
         "typeorm": "^0.3.28",

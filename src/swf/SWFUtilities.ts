@@ -146,8 +146,6 @@ export class SWFUtilities {
     public static async mapXML2JSON(habboAssetSWF: HabboAssetSWF, assetType: string, snakeCase: boolean = false): Promise<IAssetData> {
         if (!habboAssetSWF) return null;
 
-        const imageBundle = habboAssetSWF.getImageBundle();
-
         const output: IAssetData = {};
 
         if (assetType) output.type = assetType;
@@ -181,29 +179,6 @@ export class SWFUtilities {
             visualizationXML = await this.getRoomVisualizationXML(habboAssetSWF, snakeCase);
 
             if (visualizationXML) RoomVisualizationMapper.mapXML(visualizationXML, output);
-        }
-
-        if (output.assets !== undefined) {
-            for (const asset of output.assets) {
-                if (asset.name.includes('_32_')) continue;
-
-                if (asset.source !== undefined) {
-                    asset.source = imageBundle.sources[asset.source] ?? asset.source;
-
-                    if (imageBundle.getImage(asset.source) === undefined) {
-                        delete asset.source;
-                        console.log(`Source '${asset.source}' for asset '${asset.name}' not found in image bundle!`);
-                    } else imageBundle.addImageReference(asset.source);
-                }
-
-                if (asset.name !== undefined && asset.source === undefined) {
-                    asset.name = imageBundle.sources[asset.name] ?? asset.name;
-
-                    if (imageBundle.getImage(asset.name) === undefined) {
-                        console.log(`Name '${asset.name}' for asset '${asset.name}' not found in image bundle!`);
-                    } else imageBundle.addImageReference(asset.name);
-                }
-            }
         }
 
         if (output.palettes !== undefined) {

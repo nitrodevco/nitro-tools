@@ -11,7 +11,7 @@ export class ImageBundle {
     }
 
     public getImage(path: string): Buffer {
-        return this._images[`${this._documentClass}_${path}`];
+        return this._images[path];
     }
 
     public addImage(path: string, contents: Buffer): void {
@@ -23,15 +23,13 @@ export class ImageBundle {
     public addImageReference(path: string): void {
         if (!path) return;
 
-        path = `${this._documentClass}_${path}`;
-
         if (this._images[path] !== undefined && !this._referencedImages.includes(path)) this._referencedImages.push(path);
     }
 
-    public addSource(aliasName: string, bitmapName: string): void {
-        if (!aliasName || !bitmapName) return;
+    public addSource(alias: string, path: string): void {
+        if (!alias || !path) return;
 
-        this._sources[aliasName] = bitmapName;
+        this._sources[alias] = path;
     }
 
     public get documentClass(): string {

@@ -1,4 +1,4 @@
-import { CatalogBuilder, ConvertFigureSwfs, DownloadBadges, DownloadCatalogIcons, DownloadEffectSwfs, DownloadFigureSwfs, DownloadFurnitureIcons, DownloadFurnitureSwfs, DownloadGordon, DownloadPetSwfs, DownloadSounds, GetEffectMap, GetExternalTexts, GetExternalVariables, GetFigureData, GetFigureMap, GetFlashProduction, GetFurnitureData, GetHabboAvatarActions, GetProductData } from './actions';
+import { CatalogBuilder, ConvertEffectSwfs, ConvertFigureSwfs, ConvertFurnitureSwfs, ConvertPetSwfs, DownloadBadges, DownloadCatalogIcons, DownloadEffectSwfs, DownloadFigureSwfs, DownloadFurnitureIcons, DownloadFurnitureSwfs, DownloadGordon, DownloadPetSwfs, DownloadSounds, GetEffectMap, GetExternalTexts, GetExternalVariables, GetFigureData, GetFigureMap, GetFlashProduction, GetFurnitureData, GetHabboAvatarActions, GetProductData } from './actions';
 
 const downloadFurniture = false;
 const downloadPets = false;
@@ -40,8 +40,16 @@ const bootstrap = async () => {
 
         await Promise.allSettled(promises);
 
-        //ConvertEffectSwfs(),
-        await ConvertFigureSwfs();
+        try {
+            await ConvertFigureSwfs();
+            await ConvertFurnitureSwfs();
+            await ConvertEffectSwfs();
+            await ConvertPetSwfs();
+        } catch (err) {
+            console.error('Error converting swfs', err);
+        }
+
+        //await ConvertFigureSwfs();
         //ConvertFurnitureSwfs(),
         //ConvertPetSwfs()
 

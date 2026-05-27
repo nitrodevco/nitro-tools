@@ -13,11 +13,7 @@ export const DownloadAndSaveOne = async (item: IFetchItem) => {
 
     const outputPath = join(NitroConfiguration.OUTPUT_PATH, item.destination);
 
-    if (!item.overwrite && await DoesFileExist(outputPath)) {
-        //console.warn(`File already exists: ${outputPath}`);
-
-        return true;
-    }
+    if (!item.overwrite && await DoesFileExist(outputPath)) return true;
 
     try {
         const response = await FetchRaw(item);

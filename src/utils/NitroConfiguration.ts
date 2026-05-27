@@ -5,7 +5,7 @@ export class NitroConfiguration {
     public static OUTPUT_PATH: string = './output';
     public static CONVERT_SMALL_ASSETS: boolean = false;
     public static SKIP_CONVERTED_ASSETS: boolean = true;
-    public static BATCH_SIZE: number = 25;
+    public static BATCH_SIZE: number = 5;
 
     public static get habboGordonUrl(): string {
         return `https://images.habbo.${NitroConfiguration.DOMAIN}/gordon/flash-assets-${NitroConfiguration.REVISION}`;

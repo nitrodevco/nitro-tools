@@ -1,5 +1,6 @@
 import type { ITag } from '../core';
-import { CustomIterator, ImageBundle } from '../utils';
+import type { ImageBundle } from '../utils';
+import { CustomIterator } from '../utils';
 import { ReadImagesDefineBitsLossless } from './ReadImagesDefineBitsLossless';
 import { ReadImagesJPEG3or4 } from './ReadImagesJPEG3or4';
 import { CharacterTag, DefineBinaryDataTag, ImageTag, SymbolClassTag } from './tags';
@@ -165,39 +166,5 @@ export class HabboAssetSWF {
                 }
             }
         }
-    }
-
-    public getImageBundle(): ImageBundle {
-        if (this._imageBundle) return this._imageBundle;
-
-        const documentClass = this.getDocumentClass();
-        this._imageBundle = new ImageBundle(documentClass);
-
-        const imageTags = this.imageTags();
-        const tagList = this.symbolTags();
-        const names: string[] = [];
-        const tags: number[] = [];
-
-        for (const tag of tagList) {
-            names.push(...tag.names);
-            tags.push(...tag.tags);
-        }
-
-        for (const imageTag of imageTags) this._imageBundle.images[imageTag.className] = imageTag.imgData;
-
-        for (const imageTag of imageTags) {
-            if (tags.includes(imageTag.characterId)) {
-                for (let i = 0; i < tags.length; i++) {
-                    if (tags[i] != imageTag.characterId || names[i] == imageTag.className) continue;
-
-                    const aliasName = names[i].substring(documentClass.length + 1);
-                    const sourceName = imageTag.className.substring(documentClass.length + 1);
-
-                    if (this._imageBundle.getImage(sourceName) !== undefined) this._imageBundle.addSource(aliasName, sourceName);
-                }
-            }
-        }
-
-        return this._imageBundle;
     }
 }
