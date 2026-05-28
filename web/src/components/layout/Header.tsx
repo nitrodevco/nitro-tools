@@ -33,7 +33,7 @@ export function Header() {
     <header className="h-12 sm:h-14 border-b border-border flex items-center justify-between px-3 sm:px-6 bg-background shrink-0">
       <div className="flex items-center gap-2 sm:gap-3 min-w-0">
         <div className="flex items-center gap-2 shrink-0">
-          <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-md bg-primary flex items-center justify-center">
+          <div className="rounded-md bg-primary/90 w-7 h-7 flex items-center justify-center shrink-0">
             <span className="text-primary-foreground text-xs font-bold">N</span>
           </div>
           <span className="font-semibold text-sm hidden sm:block">Nitro Asset Creator</span>

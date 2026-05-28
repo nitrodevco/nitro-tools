@@ -39,8 +39,10 @@ export function Sidebar({ className }: { className?: string }) {
 
   return (
     <div className={cn('w-52 border-r border-border bg-background shrink-0 flex-col', className)}>
-      <div className="px-3 py-4 space-y-0.5">
-        <p className="px-2 mb-2 text-xs font-semibold text-muted-foreground uppercase tracking-widest">Sections</p>
+      <div className="px-2 py-4 space-y-px">
+        <p className="px-3 mb-2 text-[10px] font-semibold text-muted-foreground/60 uppercase tracking-widest">
+          Sections
+        </p>
         {items.map((item) => {
           const Icon = item.icon;
           const active = activeTab === item.id;
@@ -49,22 +51,22 @@ export function Sidebar({ className }: { className?: string }) {
               key={item.id}
               onClick={() => setActiveTab(item.id)}
               className={cn(
-                'w-full flex items-center justify-between gap-2 px-2 py-1.5 rounded-md text-sm transition-colors',
+                'w-full flex items-center justify-between gap-2 py-1.5 rounded-sm text-sm transition-colors',
                 active
-                  ? 'bg-primary text-primary-foreground'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-accent',
+                  ? 'relative pl-3 border-l-2 border-primary text-foreground bg-primary/[0.06] font-medium'
+                  : 'pl-3 border-l-2 border-transparent text-muted-foreground/70 hover:text-foreground hover:bg-accent/30',
               )}
             >
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 min-w-0">
                 <Icon className="h-4 w-4 shrink-0" />
-                <span>{item.label}</span>
+                <span className="truncate">{item.label}</span>
               </div>
               {item.count !== undefined && item.count > 0 && (
                 <Badge
-                  variant={active ? 'outline' : 'secondary'}
+                  variant="secondary"
                   className={cn(
-                    'text-xs h-4 px-1.5 min-w-[1.25rem] flex items-center justify-center',
-                    active && 'border-primary-foreground/40 text-primary-foreground',
+                    'text-[10px] h-4 px-1.5 min-w-[1.25rem] flex items-center justify-center tabular-nums mr-2',
+                    active && 'bg-primary/15 text-primary border-transparent',
                   )}
                 >
                   {item.count}
