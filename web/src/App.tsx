@@ -13,7 +13,6 @@ import { PalettesSection } from './components/sections/PalettesSection';
 import { AnimationsSection } from './components/sections/AnimationsSection';
 import { VisualizationsSection } from './components/sections/VisualizationsSection';
 import { LogicSection } from './components/sections/LogicSection';
-import { SpritesheetSection } from './components/sections/SpritesheetSection';
 import { RoomVisualizationSection } from './components/sections/RoomVisualizationSection';
 import { useAssetStore } from './store/assetStore';
 
@@ -26,7 +25,6 @@ const sectionComponents: Record<string, React.ComponentType> = {
   animations: AnimationsSection,
   visualizations: VisualizationsSection,
   logic: LogicSection,
-  spritesheet: SpritesheetSection,
   room: RoomVisualizationSection,
 };
 
@@ -39,7 +37,6 @@ const sectionTitles: Record<string, string> = {
   animations: 'Animations',
   visualizations: 'Visualizations',
   logic: 'Logic',
-  spritesheet: 'Spritesheet',
   room: 'Room Visualization',
 };
 
@@ -52,7 +49,6 @@ const sectionDescriptions: Record<string, string> = {
   animations: 'Sprite animation sequences, frames, and direction offsets.',
   visualizations: 'Per-size rendering configurations with layers, colors, and animations.',
   logic: 'Collision model, dimensions, sounds, particles, and action handlers.',
-  spritesheet: 'Atlas metadata and frame definitions. Auto-updated when images are uploaded.',
   room: 'Floor, wall, and landscape material/texture data for room types.',
 };
 

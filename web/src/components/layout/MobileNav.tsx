@@ -4,7 +4,6 @@ import {
   Cpu,
   Film,
   Home,
-  Image,
   Images,
   Info,
   Link,
@@ -22,7 +21,6 @@ const items = [
   { id: 'animations',    label: 'Anim.',     icon: Film },
   { id: 'visualizations',label: 'Viz.',      icon: Boxes },
   { id: 'logic',         label: 'Logic',     icon: Cpu },
-  { id: 'spritesheet',   label: 'Sheet',     icon: Image },
   { id: 'room',          label: 'Room',      icon: Home },
 ] as const;
 
