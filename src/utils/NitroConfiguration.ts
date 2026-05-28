@@ -6,6 +6,7 @@ export class NitroConfiguration {
     public static CONVERT_SMALL_ASSETS: boolean = false;
     public static SKIP_CONVERTED_ASSETS: boolean = true;
     public static BATCH_SIZE: number = 5;
+    public static ALLOWED_SIZES: number[] = [1, 64];
 
     public static get habboGordonUrl(): string {
         return `https://images.habbo.${NitroConfiguration.DOMAIN}/gordon/flash-assets-${NitroConfiguration.REVISION}`;

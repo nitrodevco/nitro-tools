@@ -1,3 +1,4 @@
+import { NitroConfiguration } from '../utils';
 import { GenerateImageBundle } from './GenerateImageBundle';
 import { GenerateSpriteSheet } from './GenerateSpritesheet';
 import type { HabboAssetSWF } from './HabboAssetSWF';
@@ -7,10 +8,24 @@ export const GenerateNitroBundleFromSwf = async (habboAssetSWF: HabboAssetSWF, a
     const imageBundle = GenerateImageBundle(habboAssetSWF);
     const assetData = await SWFUtilities.mapXML2JSON(habboAssetSWF, assetType);
 
-    if (assetData && assetData.assets !== undefined) {
-        for (const asset of assetData.assets) {
-            if (asset.name.includes('_32_')) continue;
+    let assetName = habboAssetSWF.getDocumentClass();
 
+    if (assetData?.assets !== undefined) {
+        assetData.assets = assetData.assets.filter(x => {
+            if ((assetType === 'figure' || assetType === 'fx') && x.name.startsWith('sh_')) return false;
+
+            const size = x.name.substring(assetName.length + 1).split('_')[0];
+
+            if (size === 'icon') return true;
+
+            if (!isNaN(parseInt(size))) {
+                if (NitroConfiguration.ALLOWED_SIZES.indexOf(parseInt(size)) === -1) return false;
+            }
+
+            return true;
+        });
+
+        for (const asset of assetData.assets) {
             if (asset.source !== undefined) {
                 asset.source = imageBundle.sources[asset.source] ?? asset.source;
 
@@ -20,16 +35,42 @@ export const GenerateNitroBundleFromSwf = async (habboAssetSWF: HabboAssetSWF, a
             }
 
             if (asset.name !== undefined && asset.source === undefined) {
-                asset.name = imageBundle.sources[asset.name] ?? asset.name;
+                if (imageBundle.getImage(asset.name) !== undefined) {
+                    imageBundle.addImageReference(asset.name);
+                } else {
+                    const source = imageBundle.sources[asset.name];
 
-                if (imageBundle.getImage(asset.name) !== undefined) imageBundle.addImageReference(asset.name);
+                    if (source !== undefined && imageBundle.getImage(source) !== undefined) {
+                        asset.source = source;
+
+                        imageBundle.addImageReference(asset.source);
+                    }
+                }
             }
         }
     }
 
-    const spriteBundle = await GenerateSpriteSheet(imageBundle, 'Pixi' as any);
+    if (assetData?.visualizations !== undefined) {
+        assetData.visualizations = assetData.visualizations.filter(x => {
+            if (x.size !== undefined && !isNaN(x.size)) {
+                if (NitroConfiguration.ALLOWED_SIZES.indexOf(x.size) === -1) return false;
+            }
 
-    let assetName = habboAssetSWF.getDocumentClass();
+            return true;
+        });
+    }
+
+    if (assetData?.logic?.particleSystems !== undefined) {
+        assetData.logic.particleSystems = assetData.logic.particleSystems.filter(x => {
+            if (x.size !== undefined && !isNaN(x.size)) {
+                if (NitroConfiguration.ALLOWED_SIZES.indexOf(x.size) === -1) return false;
+            }
+
+            return true;
+        });
+    }
+
+    const spriteBundle = await GenerateSpriteSheet(imageBundle, 'Pixi' as any);
 
     if (assetName === 'HabboRoomContent') assetName = 'room';
 

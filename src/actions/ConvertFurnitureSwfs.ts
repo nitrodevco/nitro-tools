@@ -33,7 +33,7 @@ export const ConvertFurnitureSwfs = async () => {
         try {
             const buffer = await FetchBuffer({ url: join(NitroConfiguration.OUTPUT_PATH, `./swf/furniture/${className}.swf`) });
             const habboAssetSwf = await ExtractSwfFromBuffer(buffer);
-            const nitroBundle = await GenerateNitroBundleFromSwf(habboAssetSwf);
+            const nitroBundle = await GenerateNitroBundleFromSwf(habboAssetSwf, 'furni');
             const nitroBuffer = await nitroBundle.toArrayBufferAsync();
 
             await SaveBuffer(Buffer.from(nitroBuffer), `./furniture/${className}.nitro`);

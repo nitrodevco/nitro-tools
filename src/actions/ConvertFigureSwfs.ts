@@ -35,7 +35,7 @@ export const ConvertFigureSwfs = async () => {
         try {
             const buffer = await FetchBuffer({ url: join(NitroConfiguration.OUTPUT_PATH, `./swf/figures/${className}.swf`) });
             const habboAssetSwf = await ExtractSwfFromBuffer(buffer);
-            const nitroBundle = await GenerateNitroBundleFromSwf(habboAssetSwf);
+            const nitroBundle = await GenerateNitroBundleFromSwf(habboAssetSwf, 'figure');
             const nitroBuffer = await nitroBundle.toArrayBufferAsync();
 
             await SaveBuffer(Buffer.from(nitroBuffer), `./figures/${className}.nitro`);
