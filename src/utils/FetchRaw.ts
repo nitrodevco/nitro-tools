@@ -15,7 +15,5 @@ export const FetchRaw = async (item: IFetchItem): Promise<Response> => {
         throw new Error(`Failed to fetch: ${item.url}`);
     }
 
-    //console.log(`Fetched ${item.url}`);
-
     return response;
 };

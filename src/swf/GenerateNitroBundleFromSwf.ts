@@ -6,15 +6,19 @@ import { SWFUtilities } from './SWFUtilities';
 
 export const GenerateNitroBundleFromSwf = async (habboAssetSWF: HabboAssetSWF, assetType: string = null) => {
     const imageBundle = GenerateImageBundle(habboAssetSWF);
-    const assetData = await SWFUtilities.mapXML2JSON(habboAssetSWF, assetType);
+    const assetData = await SWFUtilities.mapXML2JSON(habboAssetSWF);
 
-    let assetName = habboAssetSWF.getDocumentClass();
+    const assetName = habboAssetSWF.getDocumentClass();
 
     if (assetData?.assets !== undefined) {
         assetData.assets = assetData.assets.filter(x => {
             if ((assetType === 'figure' || assetType === 'fx') && x.name.startsWith('sh_')) return false;
 
-            const size = x.name.substring(assetName.length + 1).split('_')[0];
+            const size = x.name.substring(assetData.type.length + 1).split('_')[0];
+
+            if (assetData.type === 'room') {
+                if (x.name.startsWith('wall_texture_32') || x.name.startsWith('floor_texture_32') || x.name.startsWith('landscape_32') || x.name.endsWith('_32') || x.name.endsWith('_32_flipH')) return false;
+            }
 
             if (size === 'icon') return true;
 
@@ -71,10 +75,6 @@ export const GenerateNitroBundleFromSwf = async (habboAssetSWF: HabboAssetSWF, a
     }
 
     const spriteBundle = await GenerateSpriteSheet(imageBundle, 'Pixi' as any);
-
-    if (assetName === 'HabboRoomContent') assetName = 'room';
-
-    assetData.name = assetName;
 
     return SWFUtilities.createNitroBundle(assetName, assetData, spriteBundle);
 };

@@ -17,6 +17,8 @@ export class ManifestMapper {
     private static mapManifestLibraryXML(xml: ManifestLibraryXML, output: IAssetData): void {
         if (!xml || !output) return;
 
+        if (xml.aliases !== undefined) console.log('has aliases', xml.name, xml.aliases);
+
         if (xml.assets !== undefined) {
             if (xml.assets.length) {
                 output.assets = [];
@@ -38,13 +40,13 @@ export class ManifestMapper {
         if (!xml || !xml.length || !output) return;
 
         for (const libraryAssetXML of xml) {
+            if (libraryAssetXML.mimeType !== 'image/png' || libraryAssetXML.param === undefined) continue;
+
             const asset: IAsset = {};
 
             if (libraryAssetXML.name !== undefined) asset.name = libraryAssetXML.name;
 
             if (libraryAssetXML.param !== undefined) ManifestMapper.mapManifestLibraryAssetParamXML(libraryAssetXML.param, asset);
-
-            //if (IMAGE_SOURCES.has(libraryAssetXML.name)) asset.source = IMAGE_SOURCES.get(libraryAssetXML.name);
 
             output.push(asset);
         }
@@ -69,8 +71,8 @@ export class ManifestMapper {
 
             if (libraryAliasXML.name !== undefined) alias.name = libraryAliasXML.name;
             if (libraryAliasXML.link !== undefined) alias.link = libraryAliasXML.link;
-            if (libraryAliasXML.flipH !== undefined) alias.flipH = libraryAliasXML.flipH;
-            if (libraryAliasXML.flipH !== undefined) alias.flipV = libraryAliasXML.flipV;
+            if (libraryAliasXML.flipH === true) alias.flipH = true;
+            if (libraryAliasXML.flipV === true) alias.flipV = true;
 
             output.push(alias);
         }

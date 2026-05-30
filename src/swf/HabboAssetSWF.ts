@@ -1,5 +1,7 @@
+import bytebuffer from 'bytebuffer';
+import { parseStringPromise } from 'xml2js';
+
 import type { ITag } from '../core';
-import type { ImageBundle } from '../utils';
 import { CustomIterator } from '../utils';
 import { ReadImagesDefineBitsLossless } from './ReadImagesDefineBitsLossless';
 import { ReadImagesJPEG3or4 } from './ReadImagesJPEG3or4';
@@ -9,7 +11,6 @@ import { UncompressSWF } from './UncompressSWF';
 export class HabboAssetSWF {
     private readonly _tags: Array<ITag> = [];
     private _documentClass: string | null = null;
-    private _imageBundle: ImageBundle | null = null;
 
     constructor(
         private readonly _data: Buffer
@@ -51,64 +52,11 @@ export class HabboAssetSWF {
                     break;
                 }
                 default:
-                    //console.log(tag.header.code);
                     break;
             }
         }
 
         this.assignClassesToSymbols();
-    }
-
-    public imageTags(): Array<ImageTag> {
-        return this._tags.filter((tag: ITag) => tag instanceof ImageTag).map(x => x);
-    }
-
-    public symbolTags(): Array<SymbolClassTag> {
-        return this._tags.filter((tag: ITag) => tag instanceof SymbolClassTag).map(x => x);
-    }
-
-    private binaryTags(): Array<DefineBinaryDataTag> {
-        return this._tags.filter((tag: ITag) => tag instanceof DefineBinaryDataTag).map(x => x);
-    }
-
-    private assignClassesToSymbols() {
-        const classes: Map<number, string> = new Map();
-
-        let iterator: CustomIterator<ITag> = new CustomIterator(this._tags);
-
-
-        while (true) {
-            let t: ITag;
-
-            do {
-                if (!iterator.hasNext()) {
-                    iterator = new CustomIterator(this._tags);
-
-                    while (iterator.hasNext()) {
-                        t = iterator.next();
-                        if (t instanceof CharacterTag) {
-                            const ct = t as CharacterTag;
-
-                            if (classes.has(ct.characterId)) {
-                                ct.className = classes.get(ct.characterId);
-                            }
-                        }
-                    }
-
-                    return;
-                }
-
-                t = iterator.next();
-            } while (!(t instanceof SymbolClassTag));
-
-            const sct = t;
-
-            for (let i = 0; i < sct.tags.length; ++i) {
-                if (!classes.has(sct.tags[i]) && !Array.from(classes.values()).includes(sct.names[i])) {
-                    classes.set(sct.tags[i], sct.names[i]);
-                }
-            }
-        }
     }
 
     public getBinaryTagByName(name: string): DefineBinaryDataTag | null {
@@ -117,6 +65,14 @@ export class HabboAssetSWF {
         if (streamTag === undefined) return null;
 
         return streamTag;
+    }
+
+    public async getBinaryDataByClassname(className: string): Promise<any> {
+        const binaryData = this.getBinaryTagByName(className);
+
+        if (!binaryData) return null;
+
+        return await parseStringPromise(this.removeComments(binaryData.binaryData));
     }
 
     public getFullClassName(type: string, documentNameTwice: boolean, snakeCase: boolean = false): string {
@@ -163,6 +119,104 @@ export class HabboAssetSWF {
                 if (sc.tags[i] == 0) {
                     this._documentClass = sc.names[i];
                     return this._documentClass;
+                }
+            }
+        }
+    }
+
+    public async getIndexXML(): Promise<any> {
+        return await this.getBinaryDataByClassname(`${this.getDocumentClass()}_index`);
+    }
+
+    public async getManifestXML(): Promise<any> {
+        return await this.getBinaryDataByClassname(`${this.getDocumentClass()}_manifest`);
+    }
+
+    public async getAnimationXML(): Promise<any> {
+        return await this.getBinaryDataByClassname(`${this.getDocumentClass()}_animation`);
+    }
+
+    public getPalette(paletteName: string): [number, number, number][] {
+        const tag = this.getBinaryTagByName(paletteName);
+        const buffer = tag ? bytebuffer.wrap(tag.binaryDataBuffer) : null;
+        const paletteColors: [number, number, number][] = []
+
+        if (buffer) {
+            let R = 0;
+            let G = 0;
+            let B = 0;
+            let counter = 1;
+
+            while ((tag.binaryDataBuffer.length - buffer.offset) > 0) {
+                if (counter == 1) R = buffer.readUint8();
+
+                else if (counter == 2) G = buffer.readUint8();
+
+                else if (counter == 3) {
+                    B = buffer.readUint8();
+
+                    paletteColors.push([R, G, B]);
+
+                    counter = 0;
+                }
+
+                counter++;
+            }
+        }
+
+        return paletteColors;
+    }
+
+    public imageTags(): Array<ImageTag> {
+        return this._tags.filter((tag: ITag) => tag instanceof ImageTag).map(x => x);
+    }
+
+    public symbolTags(): Array<SymbolClassTag> {
+        return this._tags.filter((tag: ITag) => tag instanceof SymbolClassTag).map(x => x);
+    }
+
+    private binaryTags(): Array<DefineBinaryDataTag> {
+        return this._tags.filter((tag: ITag) => tag instanceof DefineBinaryDataTag).map(x => x);
+    }
+
+    private removeComments(data: string): string {
+        return data.replace(/<!--.*?-->/sg, '');
+    }
+
+    private assignClassesToSymbols() {
+        const classes: Map<number, string> = new Map();
+
+        let iterator: CustomIterator<ITag> = new CustomIterator(this._tags);
+
+        while (true) {
+            let t: ITag;
+
+            do {
+                if (!iterator.hasNext()) {
+                    iterator = new CustomIterator(this._tags);
+
+                    while (iterator.hasNext()) {
+                        t = iterator.next();
+                        if (t instanceof CharacterTag) {
+                            const ct = t as CharacterTag;
+
+                            if (classes.has(ct.characterId)) {
+                                ct.className = classes.get(ct.characterId);
+                            }
+                        }
+                    }
+
+                    return;
+                }
+
+                t = iterator.next();
+            } while (!(t instanceof SymbolClassTag));
+
+            const sct = t;
+
+            for (let i = 0; i < sct.tags.length; ++i) {
+                if (!classes.has(sct.tags[i]) && !Array.from(classes.values()).includes(sct.names[i])) {
+                    classes.set(sct.tags[i], sct.names[i]);
                 }
             }
         }
