@@ -4,7 +4,6 @@ import {
   Cpu,
   Film,
   Home,
-  Image,
   Images,
   Info,
   Link,
@@ -33,7 +32,6 @@ export function Sidebar({ className }: { className?: string }) {
     { id: 'animations', label: 'Animations', icon: Film, count: asset.animations?.length },
     { id: 'visualizations', label: 'Visualizations', icon: Boxes, count: asset.visualizations?.length },
     { id: 'logic', label: 'Logic', icon: Cpu },
-    { id: 'spritesheet', label: 'Spritesheet', icon: Image },
     { id: 'room', label: 'Room Viz', icon: Home },
   ];
 
