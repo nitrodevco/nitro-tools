@@ -1,45 +1,56 @@
+import ora from 'ora';
 import { join } from 'path';
+
 import { ExtractSwfFromBuffer, GenerateNitroBundleFromSwf } from '../swf';
-import { FetchBuffer, NitroConfiguration, SaveBuffer } from '../utils';
+import { FetchBuffer, File, NitroConfiguration, SaveBuffer } from '../utils';
 import { GetPetNames } from './GetPetNames';
 
-const batchCount: number = 100;
-
-export const ConvertPetSwfs = async () =>
-{
+export const ConvertPetSwfs = async () => {
     const petNames = await GetPetNames();
 
-    if(!petNames || !petNames.length) return;
+    if (!petNames) return;
 
-    let promises: Promise<void>[] = [];
-    let count = 0;
+    const classNames = (NitroConfiguration.SKIP_CONVERTED_ASSETS ? petNames.filter(x => {
+        const filePath = new File(join(NitroConfiguration.OUTPUT_PATH, `./pets/${x}.nitro`));
 
-    for(const petName of petNames)
-    {
-        promises.push(
-            FetchBuffer({ url: join(NitroConfiguration.outputPath, `./swf/pets/${petName}.swf`) })
-                .then(buffer => ExtractSwfFromBuffer(buffer))
-                .then(habboAssetSwf => GenerateNitroBundleFromSwf(habboAssetSwf))
-                .then(nitroBundle => nitroBundle.toArrayBufferAsync())
-                .then(buffer => SaveBuffer(buffer, `./pets/${petName}.nitro`))
-                .catch(err => console.error(err?.message ?? err)));
+        if (filePath.exists()) return false;
 
-        count++;
+        return true;
+    }) : petNames)
+    const totalItems = classNames.length;
 
-        if(count === batchCount)
-        {
-            await Promise.allSettled(promises);
+    if (!totalItems) {
+        console.log('✅ No pets to convert! All pets have already been converted.');
 
-            promises = [];
-            count = 0;
+        return;
+    }
+
+    const spinner = ora(`Starting conversion of ${totalItems} pets...`).start();
+
+    let totalConverted = 0;
+
+    const convertItem = async (className: string) => {
+        try {
+            const buffer = await FetchBuffer({ url: join(NitroConfiguration.OUTPUT_PATH, `./swf/pets/${className}.swf`) });
+            const habboAssetSwf = await ExtractSwfFromBuffer(buffer);
+            const nitroBundle = await GenerateNitroBundleFromSwf(habboAssetSwf, 'pet');
+            const nitroBuffer = await nitroBundle.toArrayBufferAsync();
+
+            await SaveBuffer(Buffer.from(nitroBuffer), `./pets/${className}.nitro`);
+
+            spinner.text = `✅ ${className} converted successfully! (${++totalConverted}/${totalItems})`;
+        }
+
+        catch (err) {
+            console.error(`❌ ${className} failed:`, err?.message ?? err);
         }
     }
 
-    if(count > 0)
-    {
-        await Promise.allSettled(promises);
+    for (let i = 0; i < totalItems; i += NitroConfiguration.BATCH_SIZE) {
+        const batch = classNames.slice(i, i + NitroConfiguration.BATCH_SIZE);
 
-        promises = [];
-        count = 0;
+        await Promise.allSettled(batch.map(item => convertItem(item)));
     }
+
+    spinner.succeed(`Conversion complete! ${totalConverted} out of ${totalItems} pets converted successfully.`);
 };

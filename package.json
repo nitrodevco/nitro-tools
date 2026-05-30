@@ -2,9 +2,10 @@
     "name": "@nitrots/nitro-converter",
     "description": "Serverside javascript library for bundling .nitro assets",
     "version": "1.0.0",
-    "publishConfig": {
-        "access": "public"
-    },
+    "private": true,
+    "workspaces": [
+        "web"
+    ],
     "repository": {
         "type": "git",
         "url": "https://git.krews.org/nitro/nitro-converter.git"
@@ -17,11 +18,14 @@
     "type": "module",
     "scripts": {
         "build": "tsc",
-        "start:dev": "tsx src/Main.ts",
+        "dev": "tsx src/Main.ts",
         "start": "node ./dist/Main.js",
         "start:bundle": "yarn start --bundle",
         "start:extract": "yarn start --extract",
-        "start:convert-swf": "yarn start --convert-swf"
+        "start:convert-swf": "yarn start --convert-swf",
+        "web:dev": "yarn workspace nitro-asset-creator dev",
+        "web:build": "yarn workspace nitro-asset-creator build",
+        "web:preview": "yarn workspace nitro-asset-creator preview"
     },
     "dependencies": {
         "@inquirer/prompts": "^8.4.3",
@@ -33,6 +37,7 @@
         "lzma-native": "^8.0.6",
         "mysql": "^2.18.1",
         "node-fetch": "^3.3.2",
+        "ora": "^9.4.0",
         "png-stream": "^1.0.5",
         "stream-to-array": "^2.3.0",
         "typeorm": "^0.3.28",

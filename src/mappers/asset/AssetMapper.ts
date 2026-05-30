@@ -35,7 +35,6 @@ export class AssetMapper {
             const asset: IAsset = {};
 
             if (assetXML.name !== undefined) asset.name = assetXML.name;
-
             if (assetXML.source !== undefined) asset.source = assetXML.source;
 
             asset.x = assetXML.x ?? 0;

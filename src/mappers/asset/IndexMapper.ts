@@ -11,7 +11,7 @@ export class IndexMapper {
     private static mapIndexXML(indexXML: IndexXML, output: IAssetData): void {
         if (!indexXML || !output) return;
 
-        if (indexXML.type !== undefined) output.name = indexXML.type;
+        if (indexXML.type !== undefined) output.type = indexXML.type;
         if (indexXML.logic !== undefined) output.logicType = indexXML.logic;
         if (indexXML.visualization !== undefined) output.visualizationType = indexXML.visualization;
     }

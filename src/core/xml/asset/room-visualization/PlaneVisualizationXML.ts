@@ -6,8 +6,6 @@ export class PlaneVisualizationXML {
     private readonly _horizontalAngle: number;
     private readonly _verticalAngle: number;
     private readonly _allLayers: (PlaneVisualizationLayerXML | PlaneVisualizationAnimatedLayerXML)[];
-    private readonly _layers: PlaneVisualizationLayerXML[];
-    private readonly _animatedLayers: PlaneVisualizationAnimatedLayerXML[];
 
     constructor(xml: any) {
         const attributes = xml.$;
@@ -18,34 +16,17 @@ export class PlaneVisualizationXML {
             if (attributes.verticalAngle !== undefined) this._verticalAngle = parseFloat(attributes.verticalAngle);
         }
 
-        if ((xml.$$ !== undefined) && Array.isArray(xml.$$)) {
-            this._allLayers = [];
+        if ((xml.visualizationLayer !== undefined) && Array.isArray(xml.visualizationLayer)) {
+            if (!this._allLayers) this._allLayers = [];
 
-            for (const layer of xml.$$) {
-                switch (layer['#name']) {
-                    case 'visualizationLayer':
-                        this._allLayers.push(new PlaneVisualizationLayerXML(layer));
-                        break;
-                    case 'animationLayer':
-                        this._allLayers.push(new PlaneVisualizationAnimatedLayerXML(layer));
-                        break;
-                }
-            }
+            for (const layer of xml.visualizationLayer) this._allLayers.push(new PlaneVisualizationLayerXML(layer));
         }
 
-        /* if ((xml.visualizationLayer !== undefined) && Array.isArray(xml.visualizationLayer))
-        {
-            this._layers = [];
+        if ((xml.animationLayer !== undefined) && Array.isArray(xml.animationLayer)) {
+            if (!this._allLayers) this._allLayers = [];
 
-            for (const layer of xml.visualizationLayer) this._layers.push(new PlaneVisualizationLayerXML(layer));
+            for (const layer of xml.animationLayer) this._allLayers.push(new PlaneVisualizationAnimatedLayerXML(layer));
         }
-
-        if ((xml.animationLayer !== undefined) && Array.isArray(xml.animationLayer))
-        {
-            this._animatedLayers = [];
-
-            for (const layer of xml.animationLayer) this._animatedLayers.push(new PlaneVisualizationAnimatedLayerXML(layer));
-        } */
     }
 
     public get size(): number {
@@ -62,13 +43,5 @@ export class PlaneVisualizationXML {
 
     public get allLayers(): (PlaneVisualizationLayerXML | PlaneVisualizationAnimatedLayerXML)[] {
         return this._allLayers;
-    }
-
-    public get layers(): PlaneVisualizationLayerXML[] {
-        return this._layers;
-    }
-
-    public get animatedLayers(): PlaneVisualizationAnimatedLayerXML[] {
-        return this._animatedLayers;
     }
 }

@@ -1,15 +1,12 @@
-import { IFigureMap } from '../core';
+import type { IFigureMap } from '../core';
 import { FigureMapMapper } from '../mappers';
 import { FetchText, NitroConfiguration, ParseXML, SaveJson } from '../utils';
 
 let figureMap: IFigureMap = null;
 
-export const GetFigureMap = async () =>
-{
-    try
-    {
-        if(!figureMap)
-        {
+export const GetFigureMap = async () => {
+    try {
+        if (!figureMap) {
             const xml = await ParseXML(await FetchText({ url: NitroConfiguration.figureMapUrl }));
 
             figureMap = {};
@@ -20,8 +17,7 @@ export const GetFigureMap = async () =>
         }
     }
 
-    catch (err)
-    {
+    catch (err) {
         console.error(err?.message ?? err);
     }
 

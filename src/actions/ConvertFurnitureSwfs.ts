@@ -1,45 +1,60 @@
+import ora from 'ora';
 import { join } from 'path';
+
 import { ExtractSwfFromBuffer, GenerateNitroBundleFromSwf } from '../swf';
-import { FetchBuffer, NitroConfiguration, SaveBuffer } from '../utils';
+import { FetchBuffer, File, NitroConfiguration, SaveBuffer } from '../utils';
 import { GetAllFurnitureClassNames } from './GetAllFurnitureClassNames';
 
-const batchCount: number = 100;
+export const ConvertFurnitureSwfs = async () => {
+    let classNames = await GetAllFurnitureClassNames();
 
-export const ConvertFurnitureSwfs = async () =>
-{
-    const classNames = await GetAllFurnitureClassNames();
+    if (!classNames) return;
 
-    if(!classNames || !classNames.length) return;
+    classNames = (NitroConfiguration.SKIP_CONVERTED_ASSETS ? classNames.filter(x => {
+        const filePath = new File(join(NitroConfiguration.OUTPUT_PATH, `./furniture/${x}.nitro`));
 
-    let promises: Promise<void>[] = [];
-    let count = 0;
+        if (filePath.exists()) return false;
 
-    for(const className of classNames)
-    {
-        promises.push(
-            FetchBuffer({ url: join(NitroConfiguration.outputPath, `./swf/furniture/${className}.swf`) })
-                .then(buffer => ExtractSwfFromBuffer(buffer))
-                .then(habboAssetSwf => GenerateNitroBundleFromSwf(habboAssetSwf))
-                .then(nitroBundle => nitroBundle.toArrayBufferAsync())
-                .then(buffer => SaveBuffer(buffer, `./furniture/${className}.nitro`))
-                .catch(err => console.error(err?.message ?? err)));
+        return true;
+    }) : classNames)
+    const totalItems = classNames.length;
 
-        count++; 
+    if (!totalItems) {
+        console.log('✅ No furniture to convert! All furniture have already been converted.');
 
-        if(count === batchCount)
-        {
-            await Promise.allSettled(promises);
+        return;
+    }
 
-            promises = [];
-            count = 0;
+    const spinner = ora(`Starting conversion of ${totalItems} furniture...`).start();
+
+    let totalConverted = 0;
+
+    const convertItem = async (className: string) => {
+        try {
+            const buffer = await FetchBuffer({ url: join(NitroConfiguration.OUTPUT_PATH, `./swf/furniture/${className}.swf`) });
+            const habboAssetSwf = await ExtractSwfFromBuffer(buffer);
+            const nitroBundle = await GenerateNitroBundleFromSwf(habboAssetSwf, 'furni');
+            const nitroBuffer = await nitroBundle.toArrayBufferAsync();
+
+            await SaveBuffer(Buffer.from(nitroBuffer), `./furniture/${className}.nitro`);
+
+            spinner.text = `✅ ${className} converted successfully! (${++totalConverted}/${totalItems})`;
+        }
+
+        catch (err) {
+            console.error(`❌ ${className} failed:`, err?.message ?? err);
         }
     }
 
-    if(count > 0)
-    {
-        await Promise.allSettled(promises);
+    for (let i = 0; i < totalItems; i += NitroConfiguration.BATCH_SIZE) {
+        const batch = classNames.slice(i, i + NitroConfiguration.BATCH_SIZE);
 
-        promises = [];
-        count = 0;
+        try {
+            await Promise.allSettled(batch.map(item => convertItem(item)));
+        } catch (err) {
+            console.error('Error converting batch:', err?.message ?? err);
+        }
     }
+
+    spinner.succeed(`Conversion complete! ${totalConverted} out of ${totalItems} furniture converted successfully.`);
 };

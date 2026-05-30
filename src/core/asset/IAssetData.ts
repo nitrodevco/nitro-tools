@@ -9,7 +9,6 @@ import type { IAssetVisualizationData } from './visualization';
 
 export interface IAssetData {
     type?: string;
-    name?: string;
     visualizationType?: string;
     logicType?: string;
     spritesheet?: ISpritesheetData;

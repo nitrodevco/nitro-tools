@@ -1,13 +1,11 @@
-import { IFurnitureType } from '../core';
+import type { IFurnitureType } from '../core';
 
-export const GetLogicForType = (furnitureType: IFurnitureType, isWall: boolean = false): string =>
-{
-    if(!furnitureType || !furnitureType.category?.length) return isWall ? 'default_wall' : 'default_floor';
+export const GetLogicForType = (furnitureType: IFurnitureType, isWall: boolean = false): string => {
+    if (!furnitureType || !furnitureType.category?.length) return isWall ? 'default_wall' : 'default_floor';
 
-    if(furnitureType.classname.startsWith('wf_')) return furnitureType.classname;
+    if (furnitureType.classname.startsWith('wf_')) return furnitureType.classname;
 
-    switch(furnitureType.category)
-    {
+    switch (furnitureType.category) {
         case 'gate':
             return 'gate';
         case 'roller':

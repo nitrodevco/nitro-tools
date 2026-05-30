@@ -1,22 +1,18 @@
-import { IFurnitureData } from '../core';
+import type { IFurnitureData } from '../core';
 import { FetchJson, NitroConfiguration, SaveJson } from '../utils';
 
 let furnitureData: IFurnitureData = null;
 
-export const GetFurnitureData = async () =>
-{
-    try
-    {
-        if(!furnitureData)
-        {
+export const GetFurnitureData = async () => {
+    try {
+        if (!furnitureData) {
             furnitureData = await FetchJson<IFurnitureData>({ url: NitroConfiguration.furnitureDataUrl });
 
             await SaveJson(furnitureData, './gamedata/FurnitureData.json');
         }
     }
 
-    catch (err)
-    {
+    catch (err) {
         console.error(err?.message ?? err);
     }
 

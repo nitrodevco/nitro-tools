@@ -1,29 +1,23 @@
 import { GetExternalTexts } from './GetExternalTexts';
 
 let badgeNames: string[] = null;
-const regex = /(?:badge_name_(\w+)|(\w+)_badge_name)/g;
 
-export const GetBadgeNames = async () =>
-{
-    try
-    {
-        if(!badgeNames)
-        {
+export const GetBadgeNames = async () => {
+    try {
+        if (!badgeNames) {
             const texts = await GetExternalTexts();
 
             badgeNames = [];
 
-            Object.keys(texts).forEach(key =>
-            {
+            Object.keys(texts).forEach(key => {
                 const match = key.match(/(?:badge_name_(\w+)|(\w+)_badge_name)/i);
 
-                if(match)
-                {
+                if (match) {
                     const badgeName = (match[1] || match[2])?.trim();
 
-                    if(!badgeName || !badgeName.length) return;
+                    if (!badgeName || !badgeName.length) return;
 
-                    if(badgeNames.indexOf(badgeName) >= 0) return;
+                    if (badgeNames.indexOf(badgeName) >= 0) return;
 
                     badgeNames.push(badgeName);
                 }
@@ -31,8 +25,7 @@ export const GetBadgeNames = async () =>
         }
     }
 
-    catch (err)
-    {
+    catch (err) {
         console.error(err?.message ?? err);
     }
 

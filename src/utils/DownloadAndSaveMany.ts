@@ -1,21 +1,17 @@
-import { IFetchItem } from '../core';
+import type { IFetchItem } from '../core';
 import { DownloadAndSaveOne } from './DownloadAndSaveOne';
+import { NitroConfiguration } from './NitroConfiguration';
 
-const batchCount = 100;
-
-export const DownloadAndSaveMany = async (items: IFetchItem[], overwrite: boolean = false) =>
-{
+export const DownloadAndSaveMany = async (items: IFetchItem[], overwrite: boolean = false) => {
     let promises: Promise<boolean>[] = [];
     let count = 0;
 
-    for(const item of items)
-    {
+    for (const item of items) {
         promises.push(DownloadAndSaveOne({ ...item, overwrite }));
 
         count++;
 
-        if(count === batchCount)
-        {
+        if (count === NitroConfiguration.BATCH_SIZE) {
             await Promise.allSettled(promises);
 
             promises = [];
@@ -23,8 +19,7 @@ export const DownloadAndSaveMany = async (items: IFetchItem[], overwrite: boolea
         }
     }
 
-    if(count > 0)
-    {
+    if (count > 0) {
         await Promise.allSettled(promises);
 
         promises = [];

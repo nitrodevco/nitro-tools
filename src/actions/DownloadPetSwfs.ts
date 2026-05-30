@@ -1,14 +1,12 @@
 import { DownloadAndSaveMany, NitroConfiguration } from '../utils';
 import { GetPetNames } from './GetPetNames';
 
-export const DownloadPetSwfs = async () =>
-{
+export const DownloadPetSwfs = async () => {
     const petNames = await GetPetNames();
 
-    if(!petNames || !petNames.length) return;
+    if (!petNames || !petNames.length) return;
 
-    await DownloadAndSaveMany(petNames.map(petName =>
-    {
+    await DownloadAndSaveMany(petNames.map(petName => {
         return {
             url: `${NitroConfiguration.petUrl}/${petName}.swf`,
             destination: `./swf/pets/${petName}.swf`

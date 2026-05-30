@@ -1,14 +1,11 @@
-import { IFurnitureAlias, IFurnitureType } from '../core';
+import type { IFurnitureAlias, IFurnitureType } from '../core';
 import { GetFurnitureData } from './GetFurnitureData';
 
 let floorFurniture: IFurnitureType[] = null;
 
-export const GetFloorFurniture = async () =>
-{
-    try
-    {
-        if(!floorFurniture)
-        {
+export const GetFloorFurniture = async () => {
+    try {
+        if (!floorFurniture) {
             const furnitureData = await GetFurnitureData();
 
             const aliases: IFurnitureAlias[] = [
@@ -67,17 +64,15 @@ export const GetFloorFurniture = async () =>
                 ...furnitureData.roomitemtypes.furnitype
             ];
 
-            for(const item of aliases)
-            {
+            for (const item of aliases) {
                 const furniture = floorFurniture.find(furniture => item.name === furniture.classname);
 
-                if(furniture) floorFurniture.push({ classname: item.alias, revision: furniture.revision, ...furniture });
+                if (furniture) floorFurniture.push({ classname: item.alias, revision: furniture.revision, ...furniture });
             }
         }
     }
 
-    catch (err)
-    {
+    catch (err) {
         console.error(err?.message ?? err);
     }
 

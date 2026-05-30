@@ -1,16 +1,13 @@
-export class CustomIterator<TType>
-{
+export class CustomIterator<TType> {
     private idx: number;
     private readonly top: number;
     private readonly keys: Array<string>;
     private readonly isArray: boolean;
     private readonly collection: Array<TType> | { [key: string]: TType };
 
-    constructor(collection: Array<TType> | { [key: string]: TType })
-    {
-        if(this.isNonIterable(collection))
-        {
-            throw new Error(`Cannot iterate over the provided collection: ${collection}`);
+    constructor(collection: Array<TType> | { [key: string]: TType }) {
+        if (this.isNonIterable(collection)) {
+            throw new Error(`Cannot iterate over the provided collection: ${typeof collection}`);
         }
 
         this.isArray = Array.isArray(collection);
@@ -20,8 +17,7 @@ export class CustomIterator<TType>
         this.collection = collection;
     }
 
-    private isNonIterable(candidate: any): boolean
-    {
+    private isNonIterable(candidate: any): boolean {
         return (
             !candidate ||
             typeof candidate === 'number' ||
@@ -30,10 +26,8 @@ export class CustomIterator<TType>
         );
     }
 
-    public next(): TType
-    {
-        if(!this.hasNext())
-        {
+    public next(): TType {
+        if (!this.hasNext()) {
             throw new Error('No more elements.');
         }
 
@@ -42,8 +36,7 @@ export class CustomIterator<TType>
         return elem;
     }
 
-    public hasNext(): boolean
-    {
+    public hasNext(): boolean {
         return this.isArray ? this.idx < this.top : this.idx < this.keys.length;
     }
 }

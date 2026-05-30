@@ -1,4 +1,4 @@
-import { CatalogBuilder, ConvertFigureSwfs, DownloadBadges, DownloadCatalogIcons, DownloadEffectSwfs, DownloadFigureSwfs, DownloadFurnitureIcons, DownloadFurnitureSwfs, DownloadGordon, DownloadPetSwfs, DownloadSounds, GetEffectMap, GetExternalTexts, GetExternalVariables, GetFigureData, GetFigureMap, GetFlashProduction, GetFurnitureData, GetHabboAvatarActions, GetProductData } from './actions';
+import { CatalogBuilder, ConvertEffectSwfs, ConvertFigureSwfs, ConvertFurnitureSwfs, ConvertGenericSwfs, ConvertPetSwfs, DownloadBadges, DownloadCatalogIcons, DownloadEffectSwfs, DownloadFigureSwfs, DownloadFurnitureIcons, DownloadFurnitureSwfs, DownloadGordon, DownloadPetSwfs, DownloadSounds, GetEffectMap, GetExternalTexts, GetExternalVariables, GetFigureData, GetFigureMap, GetFlashProduction, GetFurnitureData, GetHabboAvatarActions, GetProductData } from './actions';
 
 const downloadFurniture = false;
 const downloadPets = false;
@@ -10,6 +10,12 @@ const downloadCatalogIcons = false;
 const downloadFurniIcons = false;
 const downloadGordon = false;
 const buildCatalog = false;
+
+const convertGeneric = false;
+const convertFigures = true;
+const convertFurniture = false;
+const convertEffects = false;
+const convertPets = false;
 
 const bootstrap = async () => {
     try {
@@ -40,12 +46,15 @@ const bootstrap = async () => {
 
         await Promise.allSettled(promises);
 
-        await Promise.allSettled([
-            //ConvertEffectSwfs(),
-            ConvertFigureSwfs(),
-            //ConvertFurnitureSwfs(),
-            //ConvertPetSwfs()
-        ]);
+        try {
+            if (convertGeneric) await ConvertGenericSwfs();
+            if (convertFigures) await ConvertFigureSwfs();
+            if (convertFurniture) await ConvertFurnitureSwfs();
+            if (convertEffects) await ConvertEffectSwfs();
+            if (convertPets) await ConvertPetSwfs();
+        } catch (err) {
+            console.error('Error converting swfs', err);
+        }
 
         const catalog = new CatalogBuilder();
 

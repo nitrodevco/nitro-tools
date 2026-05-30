@@ -2,25 +2,20 @@ import { GetExternalTexts } from './GetExternalTexts';
 
 let posterIds: number[] = null;
 
-export const GetPosterIds = async () =>
-{
-    try
-    {
-        if(!posterIds)
-        {
+export const GetPosterIds = async () => {
+    try {
+        if (!posterIds) {
             const texts = await GetExternalTexts();
 
             posterIds = [];
 
-            Object.keys(texts).forEach((key) =>
-            {
+            Object.keys(texts).forEach((key) => {
                 const match = key.match(/poster_(\d+)_/);
 
-                if(match)
-                {
+                if (match) {
                     const posterId = Number(match[1].trim());
 
-                    if(posterIds.indexOf(posterId) >= 0) return;
+                    if (posterIds.indexOf(posterId) >= 0) return;
 
                     posterIds.push(posterId);
                 }
@@ -28,8 +23,7 @@ export const GetPosterIds = async () =>
         }
     }
 
-    catch (err)
-    {
+    catch (err) {
         console.error(err?.message ?? err);
     }
 
