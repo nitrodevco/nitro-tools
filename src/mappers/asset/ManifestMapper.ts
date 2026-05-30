@@ -17,8 +17,6 @@ export class ManifestMapper {
     private static mapManifestLibraryXML(xml: ManifestLibraryXML, output: IAssetData): void {
         if (!xml || !output) return;
 
-        if (xml.aliases !== undefined) console.log('has aliases', xml.name, xml.aliases);
-
         if (xml.assets !== undefined) {
             if (xml.assets.length) {
                 output.assets = [];
