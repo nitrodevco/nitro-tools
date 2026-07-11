@@ -7,7 +7,6 @@ import { SWFUtilities } from './SWFUtilities';
 export const GenerateNitroBundleFromSwf = async (habboAssetSWF: HabboAssetSWF, assetType: string = null) => {
     const imageBundle = GenerateImageBundle(habboAssetSWF);
     const assetData = await SWFUtilities.mapXML2JSON(habboAssetSWF);
-
     const assetName = habboAssetSWF.getDocumentClass();
 
     if (assetData?.assets !== undefined) {
@@ -20,7 +19,7 @@ export const GenerateNitroBundleFromSwf = async (habboAssetSWF: HabboAssetSWF, a
                 if (x.name.startsWith('wall_texture_32') || x.name.startsWith('floor_texture_32') || x.name.startsWith('landscape_32') || x.name.endsWith('_32') || x.name.endsWith('_32_flipH')) return false;
             }
 
-            if (size === 'icon') return true;
+            if (size === 'icon' || assetType === 'figure' || assetType === 'fx') return true;
 
             if (!isNaN(parseInt(size))) {
                 if (NitroConfiguration.ALLOWED_SIZES.indexOf(parseInt(size)) === -1) return false;
